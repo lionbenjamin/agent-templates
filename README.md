@@ -17,39 +17,36 @@ This will copy all agent templates to:
 - `~/.gemini/antigravity/global_workflows/` (for Antigravity)
 - `~/.cursor/commands/` (for Cursor)
 
-## 🤖 Available Agents
+## 🏗️ Project Setup
 
-### Core Development Workflow
-- **`implement.md`** - Execute implementation plans with precision
-- **`plan.md`** - Create detailed implementation plans
-- **`code_review.md`** - Perform thorough code reviews as a Principal Engineer
-- **`fix.md`** - Debug and fix code issues systematically
-- **`optimize.md`** - Improve code performance and efficiency
+- **Step 0**: `/constitute` - Define tech stack & standards (`constitute.md`)
 
-### Quality Assurance
-- **`quality.md`** - Ensure overall code quality standards
-- **`tech_review.md`** - Technical architecture and design review
-- **`skeptical_review.md`** - Critical review from a skeptical perspective
-- **`security_agent.md`** - Security-focused code analysis
-- **`a11y_check.md`** - Accessibility compliance review
+## 🔄 The Agentic SDLC
 
-### Planning & Design
-- **`specify.md`** - Detailed requirements specification
-- **`review_plan.md`** - Review and validate implementation plans
-- **`review_spec.md`** - Review requirements specifications
-- **`ux_redesign.md`** - User experience design improvements
+- **Step 1**: `/specify` - Draft comprehensive spec (`specify.md`)
+- **Step 2**: `/clarify` - Refine requirements & acceptance criteria (`clarify.md`)
+- **Step 3**: `/plan` - Create TDD & implementation plan (`plan.md`)
+- **Step 4**: `/review_plan` - Principal Engineer architectural review (`review_plan.md`)
+- **Step 5**: `/tasks` - Break down plan into actionable tasks (`tasks.md`)
+- **Step 6**: `/implement` - TDD-first code generation (`implement.md`)
+- **Step 7**: `/code_review` - Security & quality analysis (`code_review.md`)
+- **Step 8**: `/quality_agent` - Correctness verification & audit (`quality.md`)
+- **Step 9**: `/commit` - Staging & conventional commits (`commit.md`)
+- **Step 10**: `/deploy` - Production toggle & deployment (`deploy.md`)
+- **Step 11**: `/retro` - Loop feedback to improve instructions (`retro.md`)
 
-### Operations & Maintenance
-- **`deploy.md`** - Deployment and release management
-- **`release_gate.md`** - Release readiness validation
-- **`janitor.md`** - Code cleanup and maintenance tasks
-- **`constitute.md`** - Constitutional AI alignment checks
+## 🕵️ Special Agents
 
-### Communication & Documentation
-- **`document.md`** - Generate comprehensive documentation
-- **`clarify.md`** - Improve clarity and communication
-- **`commit.md`** - Write meaningful commit messages
-- **`retro.md`** - Retrospective analysis and improvement
+- **The Skeptic**: `/skeptical_review` - Critical architectural reviews (`skeptical_review.md`)
+- **The Security Agent**: `/security_agent` - Security-focused code analysis (`security_agent.md`)
+- **The Janitor**: `/janitor` - Code cleanup and maintenance (`janitor.md`)
+- **The Doc Agent**: `/document` - Documentation synchronization (`document.md`)
+- **The Speed Demon**: `/optimize` - Performance optimization (`optimize.md`)
+- **The A11y Agent**: `/a11y_check` - Accessibility compliance (`a11y_check.md`)
+- **The Principal Designer**: `/ux_redesign` - User experience design (`ux_redesign.md`)
+- **The Bug Hunter**: `/fix` - Surgical bug fixing (`fix.md`)
+- **The Release Gate**: `/release_gate` - Release readiness validation (`release_gate.md`)
+- **Technical Review**: `/tech_review` - Technical architecture review (`tech_review.md`)
 
 ## 📋 Agent Structure
 
@@ -114,7 +111,11 @@ These agents are designed with software craftsmanship principles:
 
 See [LICENSE](LICENSE) for details.
 
-## 🔗 Related Projects
+## � Inspiration
+
+This project was inspired by [SpecKit](https://github.com/github/spec-kit), a toolkit by GitHub to help you get started with Spec-Driven Development.
+
+## �🔗 Related Projects
 
 - [Gemini AI](https://gemini.google.com/) - AI assistant platform
 - [Cursor](https://cursor.sh/) - AI-first code editor

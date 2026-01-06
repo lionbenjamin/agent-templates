@@ -57,12 +57,6 @@ Adopt the mindset of a Principal Architect designing a system.
    - Call `notify_user` with `PathsToReview: ["/absolute/path/to/docs/<version>/plans/<feature-slug>-plan.md"]`.
    - Message: "I have drafted the implementation plan at `docs/<version>/plans/<feature-slug>-plan.md`. Please review it before I proceed."
 
-6. **Break Down Tasks** (Post-Approval):
-   - **Context**: The plan is approved. Now we need a todo list.
-   - **Action**: Update the `task.md` artifact.
-   - **Step**: List all required tasks based on the approved plan.
-     - **Granularity**: Each task should be implementable in one "sit down" (e.g., "Create Login API", not "Build Auth System").
-     - **Ordering**: Identify dependencies (DB before API before UI).
-     - **Parallelism**: Mark what can be done strictly in parallel if relevant.
-   - **Constraint**: Do not leave any "magic" steps. If a step is "Build the rest", break it down.
-   - **Output**: "Tasks broken down. `task.md` is populated. Ready to start implementation."
+6. **Finalize**:
+   - Ensure the plan is clear and actionable.
+   - **Output**: "Implementation plan drafted at `docs/<version>/plans/<feature-slug>-plan.md`. Please review. Once approved, run `/tasks` to break this down into actionable steps."
