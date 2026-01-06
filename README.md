@@ -6,7 +6,7 @@ A comprehensive collection of AI agent templates designed for software developme
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/lionbenjamin/agent-templates.git
 cd agent-templates
 
 # Install workflows for both Antigravity and Cursor
