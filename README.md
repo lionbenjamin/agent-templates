@@ -30,13 +30,17 @@ This will copy all agent templates to:
 - **Step 5**: `/tasks` - Break down plan into actionable tasks (`tasks.md`)
 - **Step 6**: `/implement` - TDD-first code generation (`implement.md`)
 - **Step 7**: `/code_review` - Security & quality analysis (`code_review.md`)
-- **Step 8**: `/quality_agent` - Correctness verification & audit (`quality.md`)
+- **Step 8**: `/quality` - Correctness verification & audit (`quality.md`)
 - **Step 9**: `/commit` - Staging & conventional commits (`commit.md`)
 - **Step 10**: `/deploy` - Production toggle & deployment (`deploy.md`)
 - **Step 11**: `/retro` - Loop feedback to improve instructions (`retro.md`)
 
+> **Tip:** Run `/feature` to orchestrate the entire SDLC with approval gates at each stage.
+
 ## 🕵️ Special Agents
 
+- **The Orchestrator**: `/feature` - Full SDLC cycle with approval gates (`feature.md`)
+- **The Validator**: `/analyze` - Pre-implementation consistency check (`analyze.md`)
 - **The Skeptic**: `/skeptical_review` - Critical architectural reviews (`skeptical_review.md`)
 - **The Security Agent**: `/security_agent` - Security-focused code analysis (`security_agent.md`)
 - **The Janitor**: `/janitor` - Code cleanup and maintenance (`janitor.md`)
@@ -55,11 +59,12 @@ Each agent template follows a consistent structure:
 ```yaml
 ---
 description: Brief description of the agent's purpose
+handoffs:
+  - trigger: /next-command
+    label: "Description of next step"
 ---
 
-# Agent Title
-
-## 🎭 Persona
+## 🎭 Persona: [Role Name]
 [Specific mindset and approach the agent should adopt]
 
 ## Prerequisites
@@ -71,6 +76,33 @@ description: Brief description of the agent's purpose
 ## Output Format
 [Expected structure of the agent's response]
 ```
+
+### Handoffs
+
+SDLC agents include `handoffs` in their frontmatter to suggest the next workflow step:
+
+```
+/specify → /clarify → /plan → /review_plan → /tasks → /implement → /code_review → /quality → /commit → /deploy → /retro
+```
+
+### Task Markers
+
+When using `/tasks`, you can mark tasks for parallel execution:
+- `[P]` — Can run in parallel with other `[P]` tasks
+- `[B]` — Blocking; dependencies must complete first
+
+## 🧠 Memory System
+
+Agents persist context across sessions using these files:
+
+| File | Purpose |
+|------|---------|
+| `technical_constitution.md` | Non-negotiable tech stack and architecture constraints (created by `/constitute`) |
+| `docs/process/lessons-learned.md` | Retrospective insights (updated by `/retro`) |
+| `RULES.md` | AI-readable rules derived from constitution |
+
+Agents like `/plan` and `/implement` reference these files to ensure consistency.
+
 
 ## 🔧 Customization
 
@@ -111,11 +143,24 @@ These agents are designed with software craftsmanship principles:
 
 See [LICENSE](LICENSE) for details.
 
-## � Inspiration
+## ⚡ Turbo Mode
+
+For power users, workflows support turbo annotations to auto-approve safe commands:
+
+- `// turbo` - Auto-run the next step only
+- `// turbo-all` - Auto-run ALL steps in the workflow
+
+Example in a workflow:
+```markdown
+// turbo
+3. Run the build command
+```
+
+## 💡 Inspiration
 
 This project was inspired by [SpecKit](https://github.com/github/spec-kit), a toolkit by GitHub to help you get started with Spec-Driven Development.
 
-## �🔗 Related Projects
+## 🔗 Related Projects
 
 - [Gemini AI](https://gemini.google.com/) - AI assistant platform
 - [Cursor](https://cursor.sh/) - AI-first code editor

@@ -1,13 +1,23 @@
 ---
 description: Review the current feature specification for clarity, completeness, and edge cases.
+handoffs:
+  - trigger: /plan
+    label: "Create technical implementation plan"
 ---
+
 ## 🎭 Persona: Principal Product Manager
 
 Adopt the mindset of a Principal Product Manager.
--   **Value Critical**: does this solve a real user problem? is the "why" clear?
--   **Clarity & Completeness**: ambiguous terms like "fast" or "easy" are not requirements. Detailed acceptance criteria are needed.
--   **Feasibility Check**: Is this an MVP or a roadmap? Should we cut scope to ship faster? checking existing capabilities (e.g. Prisma schema, API routes).
--   **Strategic Alignment**: does this fit the broader product vision?
+- **Value Critical**: Does this solve a real user problem? Is the "why" clear?
+- **Clarity & Completeness**: Ambiguous terms like "fast" or "easy" are not requirements. Detailed acceptance criteria are needed.
+- **Feasibility Check**: Is this an MVP or a roadmap? Should we cut scope to ship faster?
+- **Strategic Alignment**: Does this fit the broader product vision?
+
+## Prerequisites
+- A specification file exists (usually in `docs/<version>/specs/`)
+- The specification has been through initial drafting
+
+## Process
 
 1. **Identify Specification**:
    - Ask the user which specification file they want to review, or look for recent markdown files in `docs/` or `docs/v0.1/` (e.g. `spec-v0.1.md` or similar).
@@ -28,3 +38,26 @@ Adopt the mindset of a Principal Product Manager.
    - List "Missing Scenarios" (edge cases, user flows).
    - Suggest specific additions to the specification document to improve clarity for engineering.
 
+## Output Format
+
+```markdown
+# Specification Review: [Feature Name]
+
+## Clarification Questions
+1. [Question about ambiguous requirement]
+2. [Question about scope]
+
+## Missing Scenarios
+- [ ] Empty state handling
+- [ ] Error state handling
+- [ ] Loading state
+- [ ] [Other edge case]
+
+## Recommended Additions
+- Add acceptance criteria for [X]
+- Clarify the definition of [Y]
+- Consider adding [Z] to out of scope
+
+## Feasibility Notes
+[Any technical concerns or blockers identified]
+```

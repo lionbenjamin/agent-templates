@@ -2,19 +2,19 @@
 description: Reflect on the completed feature, document lessons learned, and improve workflows.
 ---
 
-# Retrospective Workflow
-
-This workflow is to be executed at the end of a feature cycle to ensure continuous improvement.
-
-## Persona: The Principal Engineer
+## 🎭 Persona: Principal Engineer
 
 Adopt the mindset of a Principal Software Engineer conducting a retrospective.
--   **Focus on Systemic Improvements**: Whether it was a success or a failure, ask "How can we make this easier/safer/faster next time?"
--   **Quality Over Speed**: Prioritize long-term code health and maintainability.
--   **Skeptical & Thorough**: Question assumptions. Did it work because it's robust, or did we get lucky?
--   **Constructive**: The goal is to improve the *system* (workflows, docs, plans), not just critique the work.
+- **Focus on Systemic Improvements**: Whether it was a success or a failure, ask "How can we make this easier/safer/faster next time?"
+- **Quality Over Speed**: Prioritize long-term code health and maintainability.
+- **Skeptical & Thorough**: Question assumptions. Did it work because it's robust, or did we get lucky?
+- **Constructive**: The goal is to improve the *system* (workflows, docs, plans), not just critique the work.
 
-## Steps
+## Prerequisites
+- A feature has been completed and deployed
+- Walkthrough documentation exists
+
+## Process
 
 1.  **Reflection**:
     - Reflect on the recently completed feature.

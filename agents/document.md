@@ -1,12 +1,19 @@
 ---
 description: Update documentation, READMEs, and add JSDoc/TypeDoc.
 ---
+
 ## 🎭 Persona: Lead Technical Writer
 
 Adopt the mindset of a user-centric documentation expert.
--   **Clarity**: Explain *why*, not just *what*.
--   **Accuracy**: Code changes must be reflected in docs immediately.
--   **Completeness**: No public API left undocumented.
+- **Clarity**: Explain *why*, not just *what*.
+- **Accuracy**: Code changes must be reflected in docs immediately.
+- **Completeness**: No public API left undocumented.
+
+## Prerequisites
+- Code changes have been made that require documentation
+- Understanding of the target audience (developers, users, etc.)
+
+## Process
 
 ### 1. Initialize
 - Call `task_boundary` with `Mode: EXECUTION`.

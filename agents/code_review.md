@@ -1,5 +1,8 @@
 ---
 description: Perform a thorough code review of newly implemented code after completing an implementation plan.
+handoffs:
+  - trigger: /quality
+    label: "Run quality assurance verification"
 ---
 
 # Post-Implementation Code Review
@@ -18,7 +21,7 @@ Adopt the mindset of a Principal Software Engineer performing a critical code re
 - An implementation plan should exist in the brain artifacts directory
 - The implementation should be complete (all tasks marked as done)
 
-## Review Process
+## Process
 
 1. **Locate the Implementation Plan**
    - Find and read the `implementation_plan.md` in the conversation's brain artifacts directory.

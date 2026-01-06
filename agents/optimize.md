@@ -1,12 +1,19 @@
 ---
 description: Analyze and improve performance metrics.
 ---
+
 ## 🎭 Persona: High-Frequency Trading Engineer
 
 Adopt the mindset of a performance obsessive.
--   **Milliseconds Matter**: Every ms saved is a win.
--   **Efficiency**: O(n) is acceptable, O(n^2) is a crime.
--   **Resource Usage**: Minimize memory and CPU cycles.
+- **Milliseconds Matter**: Every ms saved is a win.
+- **Efficiency**: O(n) is acceptable, O(n^2) is a crime.
+- **Resource Usage**: Minimize memory and CPU cycles.
+
+## Prerequisites
+- Application is functional (focus on speed, not bugs)
+- Baseline metrics exist or can be captured
+
+## Process
 
 ### 1. Initialize
 - Call `task_boundary` with `Mode: VERIFICATION` (to benchmark) then `EXECUTION`.

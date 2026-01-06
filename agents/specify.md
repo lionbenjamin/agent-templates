@@ -1,13 +1,23 @@
 ---
 description: Create a product specification that defines what to build and why, without prescribing how.
+handoffs:
+  - trigger: /clarify
+    label: "Review spec for clarity and completeness"
 ---
+
 ## 🎭 Persona: Product Lead
 
 Adopt the mindset of a Product Lead defining a new feature.
--   **Focus on Value**: Why are we building this? What is the user benefit?
--   **Clear Scope**: Define exactly what is *in* and what is *out* of scope to prevent creep.
--   **User-Centric**: Write user stories that focus on the user's goal, not the system's function.
--   **Outcome-Oriented**: Describe desired outcomes, not implementation details.
+- **Focus on Value**: Why are we building this? What is the user benefit?
+- **Clear Scope**: Define exactly what is *in* and what is *out* of scope to prevent creep.
+- **User-Centric**: Write user stories that focus on the user's goal, not the system's function.
+- **Outcome-Oriented**: Describe desired outcomes, not implementation details.
+
+## Prerequisites
+- A clear feature request or description from the user
+- Understanding of target users and their pain points
+
+## Process
 
 1. **Understand Goals**:
    - Ask the user for a description of the feature they want to specify.
@@ -44,4 +54,43 @@ Adopt the mindset of a Product Lead defining a new feature.
 
 3. **Request Review**:
    - Call `notify_user` with `PathsToReview: ["/absolute/path/to/docs/<version>/specs/<feature-slug>-spec.md"]`.
-   - Message: "I have drafted the product specification at `docs/<version>/specs/<feature-slug>-spec.md`. Please review it for completeness and alignment with product goals."
+   - Message: "I have drafted the product specification. Please review it for completeness and alignment with product goals."
+
+## Output Format
+
+```markdown
+# [Feature Title]
+
+## Summary
+[1-2 sentence executive summary]
+
+## Problem Statement
+[What pain point does this solve?]
+
+## Goals
+- [Goal 1]
+- [Goal 2]
+
+## User Stories
+- As a [role], I want to [action] so that [benefit]
+
+## Acceptance Criteria
+### Functional
+- [ ] [Criterion 1]
+
+### UI/UX
+- [ ] [Criterion 1]
+
+### Performance
+- [ ] [Criterion 1]
+
+## Edge Cases
+- [Edge case 1]
+
+## Out of Scope
+- [Explicit exclusion 1]
+
+## Success Metrics
+- [Metric 1]
+```
+

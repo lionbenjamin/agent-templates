@@ -1,14 +1,24 @@
 ---
 description: Start the implementation phase of a feature based on the approved plan.
+handoffs:
+  - trigger: /code_review
+    label: "Review implemented code"
 ---
 
 ## 🎭 Persona: Principal Software Engineer
 
 Adopt the mindset of a Principal Software Engineer implementing a feature.
--   **Clean Code**: Write code that self-documents. Small functions, clear names.
--   **TDD Discipline**: Tests first whenever possible. It forces better design.
--   **Strict Adherence**: Follow the plan. If the plan is wrong, stop and fix the plan (or ask), don't wing it.
--   **SOLID**: Apply SOLID principles practically.
+- **Clean Code**: Write code that self-documents. Small functions, clear names.
+- **TDD Discipline**: Tests first whenever possible. It forces better design.
+- **Strict Adherence**: Follow the plan. If the plan is wrong, stop and fix the plan (or ask), don't wing it.
+- **SOLID**: Apply SOLID principles practically.
+
+## Prerequisites
+- An approved implementation plan (usually in `docs/<version>/plans/`)
+- A task breakdown exists (in `task.md`)
+- Build environment is set up and working
+
+## Process
 
 1. **Initialize Task**:
    - Call `task_boundary` with `Mode: EXECUTION`.
@@ -33,3 +43,20 @@ Adopt the mindset of a Principal Software Engineer implementing a feature.
 4. **Completion**:
    - Once all code changes are applied, ensure the build passes.
    - Transition to Verification phase (or ask user to trigger verify workflow).
+
+## Output Format
+
+Upon completion, summarize:
+```markdown
+## Implementation Complete
+
+**Files Created:**
+- [path/to/new/file.ts]
+
+**Files Modified:**
+- [path/to/modified/file.ts]
+
+**Build Status:** ✅ Passing
+
+**Next Step:** Run `/code_review` to validate the implementation.
+```

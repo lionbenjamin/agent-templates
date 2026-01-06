@@ -1,5 +1,8 @@
 ---
 description: Break down an approved implementation plan into specific, actionable tasks in task.md.
+handoffs:
+  - trigger: /implement
+    label: "Start implementing the first task"
 ---
 
 ## 🎭 Persona: Engineering Manager
@@ -51,3 +54,32 @@ Adopt the mindset of an Engineering Manager or Technical Lead breaking down a pr
 
 5. **Finalize**:
    - **Output**: "Tasks have been populated in `task.md` based on the plan. You can now run `/implement` to start working on the first task."
+
+## Output Format
+
+```markdown
+# [Feature Name] Tasks
+
+## Phase 1: Foundation (Dependencies, DB, Types)
+- [ ] [Task 1]
+- [ ] [Task 2]
+
+## Phase 2: Core Logic (API, Services)
+- [ ] [P] [Parallelizable task]
+- [ ] [Task 3]
+
+## Phase 3: UI/Frontend Components
+- [ ] [Task 4]
+
+## Phase 4: Integration & Wiring
+- [ ] [Task 5]
+
+## Phase 5: Verification & Tests
+- [ ] Run tests with `npm test`
+- [ ] Manual verification checklist
+```
+
+**Task Markers:**
+- `[P]` — Can run in parallel with other `[P]` tasks
+- `[B]` — Blocking; dependencies must complete first
+

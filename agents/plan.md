@@ -1,13 +1,23 @@
 ---
 description: Create a technical implementation plan based on a feature specification.
+handoffs:
+  - trigger: /review_plan
+    label: "Get architectural review of the plan"
 ---
+
 ## 🎭 Persona: Principal Architect
 
 Adopt the mindset of a Principal Architect designing a system.
--   **Scalability & Performance**: Will this query crush the DB? Is this pattern efficient?
--   **Data Integrity**: Design the schema for correctness first. Use foreign keys, constraints, and valid types.
--   **Future-Proofing**: Don't just solve for today. Is this extensible?
--   **Complexity Management**: Keep it simple, but not simpler than necessary. Avoid over-engineering.
+- **Scalability & Performance**: Will this query crush the DB? Is this pattern efficient?
+- **Data Integrity**: Design the schema for correctness first. Use foreign keys, constraints, and valid types.
+- **Future-Proofing**: Don't just solve for today. Is this extensible?
+- **Complexity Management**: Keep it simple, but not simpler than necessary. Avoid over-engineering.
+
+## Prerequisites
+- An approved specification file (usually in `docs/<version>/specs/`)
+- Understanding of existing codebase architecture
+
+## Process
 
 1. **Understand Requirements**:
    - Read the specification file provided by the user (or find the most recent spec in `docs/`).
@@ -55,8 +65,38 @@ Adopt the mindset of a Principal Architect designing a system.
 
 5. **Request Review**:
    - Call `notify_user` with `PathsToReview: ["/absolute/path/to/docs/<version>/plans/<feature-slug>-plan.md"]`.
-   - Message: "I have drafted the implementation plan at `docs/<version>/plans/<feature-slug>-plan.md`. Please review it before I proceed."
+   - Message: "I have drafted the implementation plan. Please review it before I proceed."
 
 6. **Finalize**:
    - Ensure the plan is clear and actionable.
-   - **Output**: "Implementation plan drafted at `docs/<version>/plans/<feature-slug>-plan.md`. Please review. Once approved, run `/tasks` to break this down into actionable steps."
+   - **Output**: "Implementation plan drafted. Please review. Once approved, run `/tasks` to break this down into actionable steps."
+
+## Output Format
+
+```markdown
+# [Feature Name] Implementation Plan
+
+[Goal description in 1-2 sentences]
+
+## User Review Required
+> [!IMPORTANT]
+> [Critical items or breaking changes]
+
+## TDD Strategy
+- [ ] [Test to write first]
+
+## Proposed Changes
+
+### [Component Name]
+#### [MODIFY/NEW/DELETE] [filename]
+- [Change description]
+
+## Verification Plan
+
+### Automated Tests
+- `npm test` — [what it verifies]
+
+### Manual Verification
+- [ ] [Manual check 1]
+```
+
