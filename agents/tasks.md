@@ -15,7 +15,7 @@ Adopt the mindset of an Engineering Manager or Technical Lead breaking down a pr
 
 ## Prerequisites
 - An approved implementation plan (usually in `docs/<version>/plans/`).
-- A `task.md` file (will be created or updated).
+- Understanding of where tasks should be stored.
 
 ## Process
 
@@ -26,11 +26,16 @@ Adopt the mindset of an Engineering Manager or Technical Lead breaking down a pr
 2. **Initialize Task Breakdown**:
    - Call `task_boundary` with `Mode: PLANNING`.
    - Set `TaskName` to "Breaking Down Tasks for [Feature Name]".
-   - Set `TaskSummary` to "Converting implementation plan into actionable items in task.md".
+   - Set `TaskSummary` to "Converting implementation plan into actionable items".
 
-3. **Populate `task.md`**:
+3. **Determine Location**:
+   - Find the latest version folder in `docs/` (e.g. `docs/v0.3/`).
+   - Create a `tasks` directory inside it if it doesn't exist.
+   - Target file: `docs/<version>/tasks/<feature-slug>-tasks.md`.
+
+4. **Populate Task File**:
    - Clear existing completed tasks if starting a fresh feature (or ask user).
-   - Create a structured checklist in `task.md`.
+   - Create a structured checklist in the task file.
    - **Format**:
      - Use `[ ]` for open tasks.
      - Use indented lists for sub-tasks.
@@ -48,12 +53,16 @@ Adopt the mindset of an Engineering Manager or Technical Lead breaking down a pr
        - [ ] Create `auth.ts` service with `signIn` and `signOut`
        - [ ] Build Login Form UI
 
-4. **Review**:
+5. **Review**:
    - Verify that completing all tasks equals completing the feature.
    - Ensure "Verification" (from the plan) is its own set of tasks at the end.
 
-5. **Finalize**:
-   - **Output**: "Tasks have been populated in `task.md` based on the plan. You can now run `/implement` to start working on the first task."
+6. **Request Review**:
+   - Call `notify_user` with `PathsToReview: ["/absolute/path/to/docs/<version>/tasks/<feature-slug>-tasks.md"]`.
+   - Message: "I have created the task breakdown. Please review before implementation."
+
+7. **Finalize**:
+   - **Output**: "Tasks have been populated in `docs/<version>/tasks/<feature-slug>-tasks.md` based on the plan. You can now run `/implement` to start working on the first task."
 
 ## Output Format
 
