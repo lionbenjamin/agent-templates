@@ -20,6 +20,7 @@ This will copy all agent templates to:
 ## 🏗️ Project Setup
 
 - **Step 0**: `/constitute` - Define tech stack & standards (`constitute.md`)
+- **Step 0.1**: `/review_constitution` - Challenge & validate constraints (`review_constitution.md`)
 
 ## 🔄 The Agentic SDLC
 
@@ -41,6 +42,7 @@ This will copy all agent templates to:
 
 - **The Orchestrator**: `/feature` - Full SDLC cycle with approval gates (`feature.md`)
 - **The Validator**: `/analyze` - Pre-implementation consistency check (`analyze.md`)
+- **The Devil's Advocate**: `/review_constitution` - Challenge & stress-test constraints (`review_constitution.md`)
 - **The Skeptic**: `/skeptical_review` - Critical architectural reviews (`skeptical_review.md`)
 - **The Security Agent**: `/security_agent` - Security-focused code analysis (`security_agent.md`)
 - **The Janitor**: `/janitor` - Code cleanup and maintenance (`janitor.md`)
