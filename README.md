@@ -1,6 +1,6 @@
 # Agent Templates
 
-A comprehensive collection of AI agent templates designed for software development workflows. These templates can be installed into Gemini and Cursor IDEs to provide specialized AI assistants for various development tasks.
+A comprehensive collection of AI agent templates designed for software development workflows. These templates can be installed into Antigravity and Cursor IDEs to provide specialized AI assistants for various development tasks.
 
 ## 🚀 Quick Start
 
@@ -164,9 +164,9 @@ This project was inspired by [SpecKit](https://github.com/github/spec-kit), a to
 
 ## 🔗 Related Projects
 
-- [Gemini AI](https://gemini.google.com/) - AI assistant platform
+- [Google Antigravity](https://idx.google.com/) - AI-first cloud development environment
 - [Cursor](https://cursor.sh/) - AI-first code editor
-- [Claude](https://claude.ai/) - Alternative AI assistant platform
+
 
 ---
 
