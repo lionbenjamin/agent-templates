@@ -21,6 +21,8 @@ This will copy all agent templates to:
 
 - **Step 0**: `/constitute` - Define tech stack & standards (`constitute.md`)
 - **Step 0.1**: `/review_constitution` - Challenge & validate constraints (`review_constitution.md`)
+- **Step 0.2**: `/domain_model` - Create comprehensive domain model (`domain_model.md`)
+- **Step 0.3**: `/review_domain` - Architectural review of domain model (`review_domain.md`)
 
 ## 🔄 The Agentic SDLC
 
