@@ -14,8 +14,30 @@ cd agent-templates
 ```
 
 This will copy all agent templates to:
-- `~/.gemini/antigravity/global_workflows/` (for Antigravity)
+- `~/.gemini/antigravity/global_workflows/` (for Antigravity workflows)
+- `~/.gemini/antigravity/skills/` (for Antigravity skills)
 - `~/.cursor/commands/` (for Cursor)
+
+## 🛠️ Skills (Auto-Activated)
+
+Skills are automatically discovered and applied by Antigravity when relevant. Unlike workflows (which require explicit `/command` invocation), skills embed best practices into every coding session.
+
+| Skill | Description |
+|-------|-------------|
+| `security-review` | OWASP Top 10, secure coding patterns, input validation |
+| `accessibility` | WCAG 2.1 AA compliance, semantic HTML, keyboard navigation |
+| `code-quality` | Naming, SRP, type safety, anti-patterns |
+| `git-conventions` | Conventional commits, atomic changes, branch naming |
+| `performance` | Algorithm efficiency, N+1 queries, React optimization |
+| `code-hygiene` | Unused code cleanup, import organization, formatting |
+| `skeptical-review` | Devil's advocate thinking, maintainability, over-engineering detection |
+| `ux-design` | Nielsen's heuristics, visual hierarchy, form design, modern UI patterns |
+| `domain-modeling` | DDD principles, bounded contexts, aggregates, invariants |
+| `tech-review` | Architectural thinking, data integrity, operational concerns |
+| `debugging` | Root cause analysis, reproduction, regression prevention |
+| `documentation` | README updates, JSDoc/TSDoc, inline documentation |
+
+Skills live in `skills/<skill-name>/SKILL.md` and follow the [Agent Skills standard](https://github.com/anthropics/agent-skills).
 
 ## 🏗️ Project Setup
 
@@ -166,7 +188,7 @@ This project was inspired by [SpecKit](https://github.com/github/spec-kit), a to
 
 ## 🔗 Related Projects
 
-- [Google Antigravity](https://idx.google.com/) - AI-first cloud development environment
+- [Google Antigravity](https://antigravity.google/) - AI-first development environment
 - [Cursor](https://cursor.sh/) - AI-first code editor
 
 
