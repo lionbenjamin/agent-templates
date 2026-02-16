@@ -74,6 +74,7 @@ Skills live in `skills/<skill-name>/SKILL.md` and follow the [Agent Skills stand
 - **The Speed Demon**: `/optimize` - Performance optimization (`optimize.md`)
 - **The A11y Agent**: `/a11y_check` - Accessibility compliance (`a11y_check.md`)
 - **The Principal Designer**: `/ux_redesign` - User experience design (`ux_redesign.md`)
+- **The Design Auditor**: `/design_audit` - Comprehensive UX design audit (`design_audit.md`)
 - **The Bug Hunter**: `/fix` - Surgical bug fixing (`fix.md`)
 - **The Release Gate**: `/release_gate` - Release readiness validation (`release_gate.md`)
 - **Technical Review**: `/tech_review` - Technical architecture review (`tech_review.md`)

@@ -13,6 +13,7 @@ SKILLS_DIR="$SCRIPT_DIR/skills"
 GEMINI_WORKFLOWS_DIR="$HOME/.gemini/antigravity/global_workflows"
 GEMINI_SKILLS_DIR="$HOME/.gemini/antigravity/skills"
 CURSOR_DIR="$HOME/.cursor/commands"
+CLAUDE_AGENTS_DIR="$HOME/.claude/agents"
 
 # Check if agents directory exists
 if [ ! -d "$AGENTS_DIR" ]; then
@@ -24,6 +25,7 @@ fi
 mkdir -p "$GEMINI_WORKFLOWS_DIR"
 mkdir -p "$GEMINI_SKILLS_DIR"
 mkdir -p "$CURSOR_DIR"
+mkdir -p "$CLAUDE_AGENTS_DIR"
 
 # Copy workflow files to both destinations
 echo "📋 Copying workflow files..."
@@ -33,6 +35,7 @@ for file in "$AGENTS_DIR"/*.md; do
         filename=$(basename "$file")
         cp "$file" "$GEMINI_WORKFLOWS_DIR/$filename"
         cp "$file" "$CURSOR_DIR/$filename"
+        cp "$file" "$CLAUDE_AGENTS_DIR/$filename"
         echo "  ✓ $filename"
     fi
 done
@@ -57,4 +60,5 @@ echo "✅ Installation complete!"
 echo "   Gemini workflows: $GEMINI_WORKFLOWS_DIR"
 echo "   Gemini skills:    $GEMINI_SKILLS_DIR"
 echo "   Cursor commands:  $CURSOR_DIR"
+echo "   Claude agents:    $CLAUDE_AGENTS_DIR"
 

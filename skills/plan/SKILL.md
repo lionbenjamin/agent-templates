@@ -42,10 +42,13 @@ This skill is relevant when:
 - Clear, maintainable design
 
 ### TDD Strategy
-- Define tests before implementation
-- Specify test coverage requirements
-- Plan test file changes
-- Test-driven design
+- TDD Strategy section MUST come before Proposed Changes in every plan
+- List new test files to create, with specific test case names
+- List existing test files to update, with specific additions
+- For each test case, describe: input → expected output
+- Specify test commands to run (e.g. `npm test`, `pytest`)
+- State expected test count change (e.g. "+8 new tests")
+- In Proposed Changes, list test file changes before implementation file changes
 
 ### Accessibility Planning
 - Identify ARIA requirements early
@@ -56,9 +59,10 @@ This skill is relevant when:
 ## Quick Checks
 
 When creating plans, verify:
+- [ ] TDD strategy section present with test files, test cases, and test commands
+- [ ] Test files listed BEFORE implementation files in Proposed Changes
 - [ ] All spec requirements covered
 - [ ] Database schema changes valid
-- [ ] TDD strategy defined
 - [ ] Test cases specified before code
 - [ ] Accessibility requirements planned
 - [ ] Existing code patterns reviewed

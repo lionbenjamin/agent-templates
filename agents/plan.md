@@ -45,18 +45,22 @@ Adopt the mindset of a Principal Architect designing a system.
      - Create a `plans` directory inside it if it doesn't exist.
      - Target file: `docs/<version>/plans/<feature-slug>-plan.md`.
    - Create the file using `write_to_file`.
-   - **Structure**:
+   - **Structure** (sections must appear in this order):
      - **Goal Description**: 1-2 sentences.
      - **User Review Required**: Critical items/breaking changes.
-     - **TDD Strategy**:
-       - Define the test cases that must be implemented *before* the main code changes.
-       - Specify where new tests will be added and what existing tests need updating.
+     - **TDD Strategy** (MUST come before Proposed Changes):
+       - List new test files to create, with specific test case names.
+       - List existing test files to update, with specific additions.
+       - For each test case, describe: input → expected output.
+       - Specify test commands to run (e.g. `npm test`, `pytest`).
+       - State expected test count change (e.g. "+8 new tests").
      - **Accessibility Strategy**:
        - Identify interactive elements that require ARIA roles (e.g. menus, modals).
        - Plan to include these attributes from the start.
-     - **Proposed Changes**:
-       - List specific files to modify (absolute paths).
-       - Ensure test files are listed here as well (TDD).
+     - **Proposed Changes** (test files FIRST, then implementation files):
+       - List test file changes first (new test files, modified test files).
+       - Then list implementation file changes (schema, services, UI, etc.).
+       - Use absolute paths.
        - For each file, briefly describe the change (add function X, update type Y).
        - Use [NEW], [MODIFY], [DELETE] tags.
      - **Verification Plan**:
@@ -83,11 +87,25 @@ Adopt the mindset of a Principal Architect designing a system.
 > [Critical items or breaking changes]
 
 ## TDD Strategy
-- [ ] [Test to write first]
+
+### New Test Files
+- [ ] `src/__tests__/feature.test.ts` — tests for [feature logic]
+  - `test("should [expected behavior]")` — input: X → expected: Y
+  - `test("should handle [edge case]")` — input: Z → expected: error
+
+### Existing Test Updates
+- [ ] `src/__tests__/existing.test.ts` — add tests for [new integration]
+
+### Test Commands
+- `npm test` — run all tests (+N new tests expected)
 
 ## Proposed Changes
 
-### [Component Name]
+### [Component] — Tests
+#### [NEW] `src/__tests__/feature.test.ts`
+- Test cases for [feature logic]
+
+### [Component] — Implementation
 #### [MODIFY/NEW/DELETE] [filename]
 - [Change description]
 

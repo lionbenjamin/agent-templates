@@ -39,23 +39,24 @@ Adopt the mindset of an Engineering Manager or Technical Lead breaking down a pr
    - **Format**:
      - Use `[ ]` for open tasks.
      - Use indented lists for sub-tasks.
-   - **Structure**:
+   - **Structure** (TDD — tests paired with implementation in each phase):
      - **Phase 1: Foundation (Dependencies, DB, Types)**
-     - **Phase 2: Core Logic (API, Services)**
-     - **Phase 3: UI/Frontend Components**
-     - **Phase 4: Integration & wiring**
-     - **Phase 5: Verification & Tests**
-   - **Granularity Rule**:
-     - BAD: "Implement Auth"
+     - **Phase 2: Core Logic** — write tests first, then implement to pass
+     - **Phase 3: UI/Frontend** — write component tests first, then implement
+     - **Phase 4: Integration & Wiring** — write integration tests first, then wire
+     - **Phase 5: Refactor & Polish** — refactor while all tests stay green
+   - **TDD Rule**: Within each phase, test tasks come before implementation tasks:
+     - BAD: "Implement Auth" then "Add auth tests"
      - GOOD:
-       - [ ] Create `User` schema in `schema.prisma`
-       - [ ] Run migration
-       - [ ] Create `auth.ts` service with `signIn` and `signOut`
-       - [ ] Build Login Form UI
+       - [ ] Write tests for `signIn` and `signOut` in `auth.test.ts`
+       - [ ] Implement `signIn` and `signOut` in `auth.ts` to pass tests
+       - [ ] Write tests for Login Form component
+       - [ ] Build Login Form UI to pass tests
 
 5. **Review**:
    - Verify that completing all tasks equals completing the feature.
-   - Ensure "Verification" (from the plan) is its own set of tasks at the end.
+   - Verify that every implementation task has a preceding test task in the same phase.
+   - Ensure no "Verification & Tests" phase is dumped at the end — tests must be interleaved.
 
 6. **Request Review**:
    - Call `notify_user` with `PathsToReview: ["/absolute/path/to/docs/<version>/tasks/<feature-slug>-tasks.md"]`.
@@ -70,25 +71,29 @@ Adopt the mindset of an Engineering Manager or Technical Lead breaking down a pr
 # [Feature Name] Tasks
 
 ## Phase 1: Foundation (Dependencies, DB, Types)
-- [ ] [Task 1]
-- [ ] [Task 2]
+- [ ] [Schema/type/dependency task]
+- [ ] [Migration task]
 
-## Phase 2: Core Logic (API, Services)
-- [ ] [P] [Parallelizable task]
-- [ ] [Task 3]
+## Phase 2: Core Logic
+- [ ] Write tests for [service A] in `service-a.test.ts`
+- [ ] Implement [service A] in `service-a.ts` to pass tests
+- [ ] [P] Write tests for [service B] in `service-b.test.ts`
+- [ ] [P] Implement [service B] in `service-b.ts` to pass tests
 
-## Phase 3: UI/Frontend Components
-- [ ] [Task 4]
+## Phase 3: UI/Frontend
+- [ ] Write component tests for [component X]
+- [ ] Build [component X] to pass tests
 
 ## Phase 4: Integration & Wiring
-- [ ] [Task 5]
+- [ ] Write integration tests for [feature flow]
+- [ ] Wire [components/services] together to pass integration tests
 
-## Phase 5: Verification & Tests
-- [ ] Run tests with `npm test`
+## Phase 5: Refactor & Polish
+- [ ] Refactor [area] — all tests must stay green
+- [ ] Run full test suite: `npm test`
 - [ ] Manual verification checklist
 ```
 
 **Task Markers:**
 - `[P]` — Can run in parallel with other `[P]` tasks
 - `[B]` — Blocking; dependencies must complete first
-

@@ -29,11 +29,12 @@ This skill is relevant when:
 - Single responsibility per task
 - Easy to verify completion
 
-### Sequential
+### Sequential & TDD-Ordered
 - Respect dependencies
 - You can't fetch data before API exists
 - Foundation before features
-- Logical ordering
+- Within each phase, test tasks come BEFORE implementation tasks
+- Write the test (RED), then implement to pass (GREEN), then refactor
 
 ### Comprehensive
 - Don't miss the "small stuff"
@@ -48,11 +49,11 @@ When creating task breakdowns, verify:
 - [ ] Tasks are specific and actionable
 - [ ] Granular enough (1-2 hours each)
 - [ ] Dependencies respected
-- [ ] Phases are logical (Foundation → Logic → UI → Integration → Verification)
+- [ ] Every implementation task has a preceding test task in same phase
+- [ ] No separate "Verification & Tests" phase at the end — tests are interleaved
+- [ ] Phases: Foundation → Logic (test→impl) → UI (test→impl) → Integration (test→impl) → Refactor
 - [ ] Database tasks come first
 - [ ] API tasks before UI tasks
-- [ ] Test tasks included
-- [ ] Verification steps at the end
 - [ ] Parallelizable tasks marked with [P]
 - [ ] Blocking tasks marked with [B]
 - [ ] No missing "small stuff" (icons, types, tests)
