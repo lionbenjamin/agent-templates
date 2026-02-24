@@ -1,6 +1,6 @@
 # Agent Templates
 
-A comprehensive collection of AI agent templates designed for software development workflows. These templates can be installed into Antigravity and Cursor IDEs to provide specialized AI assistants for various development tasks.
+A comprehensive collection of AI agent templates designed for software development workflows. These templates can be installed into Antigravity, Cursor, and Claude Code to provide specialized AI assistants for various development tasks.
 
 ## 🚀 Quick Start
 
@@ -9,7 +9,7 @@ A comprehensive collection of AI agent templates designed for software developme
 git clone https://github.com/lionbenjamin/agent-templates.git
 cd agent-templates
 
-# Install workflows for both Antigravity and Cursor
+# Install workflows for Antigravity, Cursor, and Claude Code
 ./install-workflows.sh
 ```
 
@@ -17,27 +17,44 @@ This will copy all agent templates to:
 - `~/.gemini/antigravity/global_workflows/` (for Antigravity workflows)
 - `~/.gemini/antigravity/skills/` (for Antigravity skills)
 - `~/.cursor/commands/` (for Cursor)
+- `~/.claude/commands/` (for Claude Code slash commands)
 
-## 🛠️ Skills (Auto-Activated)
+## 🛠️ Skills
 
-Skills are automatically discovered and applied by Antigravity when relevant. Unlike workflows (which require explicit `/command` invocation), skills embed best practices into every coding session.
+Skills live in `skills/<skill-name>/SKILL.md`. Each skill serves double duty:
+
+- **Antigravity**: Auto-discovered and applied when relevant during coding sessions
+- **Claude Code**: Installed as `/command` slash commands via `~/.claude/commands/`
 
 | Skill | Description |
 |-------|-------------|
-| `security-review` | OWASP Top 10, secure coding patterns, input validation |
-| `accessibility` | WCAG 2.1 AA compliance, semantic HTML, keyboard navigation |
-| `code-quality` | Naming, SRP, type safety, anti-patterns |
-| `git-conventions` | Conventional commits, atomic changes, branch naming |
-| `performance` | Algorithm efficiency, N+1 queries, React optimization |
-| `code-hygiene` | Unused code cleanup, import organization, formatting |
-| `skeptical-review` | Devil's advocate thinking, maintainability, over-engineering detection |
-| `ux-design` | Nielsen's heuristics, visual hierarchy, form design, modern UI patterns |
-| `domain-modeling` | DDD principles, bounded contexts, aggregates, invariants |
-| `tech-review` | Architectural thinking, data integrity, operational concerns |
-| `debugging` | Root cause analysis, reproduction, regression prevention |
-| `documentation` | README updates, JSDoc/TSDoc, inline documentation |
-
-Skills live in `skills/<skill-name>/SKILL.md` and follow the [Agent Skills standard](https://github.com/anthropics/agent-skills).
+| `a11y_check` | WCAG accessibility compliance |
+| `analyze` | Pre-implementation spec/plan/task consistency check |
+| `clarify` | Refine requirements and acceptance criteria |
+| `code_review` | Security and quality analysis of new code |
+| `commit` | Staging and conventional commits |
+| `constitute` | Define tech stack and architecture constraints |
+| `deploy` | Test, build, and deploy the application |
+| `document` | README updates, JSDoc/TSDoc, inline documentation |
+| `domain_model` | DDD domain modeling with bounded contexts |
+| `feature` | Full SDLC orchestration with approval gates |
+| `fix` | Root cause analysis and surgical bug fixes |
+| `implement` | TDD-first code generation |
+| `janitor` | Code cleanup and maintenance |
+| `optimize` | Performance analysis and improvement |
+| `plan` | Technical implementation planning |
+| `quality` | Correctness verification and audit |
+| `release_gate` | Release readiness validation |
+| `retro` | Retrospective and workflow improvement |
+| `review_constitution` | Challenge and stress-test constraints |
+| `review_domain` | Architectural review of domain model |
+| `review_plan` | Principal Engineer plan review |
+| `security_agent` | Security-focused code analysis (OWASP Top 10) |
+| `skeptical_review` | Critical architectural review |
+| `specify` | Draft comprehensive product specifications |
+| `tasks` | Break down plans into actionable tasks |
+| `tech_review` | Technical architecture review |
+| `ux_redesign` | User experience redesign |
 
 ## 🏗️ Project Setup
 
@@ -79,9 +96,16 @@ Skills live in `skills/<skill-name>/SKILL.md` and follow the [Agent Skills stand
 - **The Release Gate**: `/release_gate` - Release readiness validation (`release_gate.md`)
 - **Technical Review**: `/tech_review` - Technical architecture review (`tech_review.md`)
 
-## 📋 Agent Structure
+## 📋 Project Structure
 
-Each agent template follows a consistent structure:
+Each workflow exists in two formats:
+
+| Directory | Format | Used By |
+|-----------|--------|---------|
+| `agents/*.md` | Full agent templates with persona, prerequisites, and process | Antigravity workflows, Cursor commands |
+| `skills/*/SKILL.md` | Claude Code skill format with frontmatter and activation triggers | Claude Code slash commands |
+
+### Agent Template Structure
 
 ```yaml
 ---
@@ -133,16 +157,15 @@ Agents like `/plan` and `/implement` reference these files to ensure consistency
 
 ## 🔧 Customization
 
-### Adding New Agents
+### Adding New Workflows
 
-1. Create a new `.md` file in the `agents/` directory
-2. Follow the standard template structure
-3. Include a clear description, persona, and process
-4. Run `./install-workflows.sh` to deploy
+1. Create a new `.md` file in `agents/` following the agent template structure
+2. Create a matching `skills/<name>/SKILL.md` for Claude Code support
+3. Run `./install-workflows.sh` to deploy
 
-### Modifying Existing Agents
+### Modifying Existing Workflows
 
-Edit the corresponding `.md` file in the `agents/` directory, then reinstall:
+Edit the files in `agents/` and/or `skills/`, then reinstall:
 
 ```bash
 ./install-workflows.sh
@@ -191,6 +214,7 @@ This project was inspired by [SpecKit](https://github.com/github/spec-kit), a to
 
 - [Google Antigravity](https://antigravity.google/) - AI-first development environment
 - [Cursor](https://cursor.sh/) - AI-first code editor
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) - Anthropic's CLI for Claude
 
 
 ---
