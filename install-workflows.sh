@@ -35,6 +35,14 @@ for file in "$AGENTS_DIR"/*.md; do
         filename=$(basename "$file")
         cp "$file" "$GEMINI_WORKFLOWS_DIR/$filename"
         cp "$file" "$CURSOR_DIR/$filename"
+        # Rename plan.md to planning.md for Claude Code to avoid
+        # conflicting with its built-in /plan command
+        if [ "$filename" = "plan.md" ]; then
+            cp "$file" "$CLAUDE_COMMANDS_DIR/planning.md"
+            echo "  ✓ $filename (→ planning.md for Claude Code)"
+        else
+            cp "$file" "$CLAUDE_COMMANDS_DIR/$filename"
+        fi
         echo "  ✓ $filename"
     fi
 done
