@@ -22,6 +22,7 @@ Adopt the mindset of a Principal Product Manager.
 1. **Identify Specification**:
    - Ask the user which specification file they want to review, or look for recent markdown files in `docs/` or `docs/v0.1/` (e.g. `spec-v0.1.md` or similar).
    - Read the content of the specification file.
+   - Derive the output path: place the review file next to the spec, named `clarification-review.md` (e.g. `docs/v0.1/specs/clarification-review.md`).
 
 2. **Analyze for Quality & Clarity**:
    - Check if feature descriptions are unambiguous and actionable.
@@ -33,31 +34,61 @@ Adopt the mindset of a Principal Product Manager.
    - Identify potential technical blockers or major refactors required.
    - Is this MVP? Can we cut scope while maintaining value?
 
-4. **Report Findings**:
-   - Provide a bulleted list of "Product & Clarification Questions".
-   - List "Missing Scenarios" (edge cases, user flows).
-   - Suggest specific additions to the specification document to improve clarity for engineering.
+4. **Write Review File**:
+   - Write the full review output to `clarification-review.md` (see Output Format below).
+   - Every gap, question, and missing scenario must include a **Recommendation** — a concrete suggestion for what to add or change in the spec to resolve it.
+   - Confirm the file was written by printing its path.
 
 ## Output Format
+
+Write to `<spec-directory>/clarification-review.md`:
 
 ```markdown
 # Specification Review: [Feature Name]
 
+_Reviewed: [date]_
+_Spec file: [path to spec]_
+
 ## Clarification Questions
-1. [Question about ambiguous requirement]
-2. [Question about scope]
+
+Each question includes a recommended resolution.
+
+### 1. [Question about ambiguous requirement]
+**Gap**: [What is unclear or missing]
+**Recommendation**: [Specific text or section to add/change in the spec to resolve this]
+
+### 2. [Question about scope]
+**Gap**: [What is unclear or missing]
+**Recommendation**: [Specific text or section to add/change in the spec to resolve this]
 
 ## Missing Scenarios
-- [ ] Empty state handling
-- [ ] Error state handling
-- [ ] Loading state
-- [ ] [Other edge case]
+
+Each missing scenario includes a recommended addition.
+
+### Empty State
+**Gap**: Spec does not define what the user sees when there is no data.
+**Recommendation**: Add to the spec: "Empty state: display [message/illustration] with a CTA to [action]."
+
+### Error State
+**Gap**: [Description of missing error handling]
+**Recommendation**: [Specific wording or section to add to the spec]
+
+### [Other Edge Case]
+**Gap**: [Description]
+**Recommendation**: [Specific addition to make]
 
 ## Recommended Additions
-- Add acceptance criteria for [X]
-- Clarify the definition of [Y]
-- Consider adding [Z] to out of scope
+
+Broader improvements not tied to a single gap.
+
+- **[Topic]**: [What to add and where in the spec]
 
 ## Feasibility Notes
-[Any technical concerns or blockers identified]
+
+- **[Concern]**: [Description and suggested scope adjustment or out-of-scope call]
+
+## Verdict
+
+- `APPROVED` — Spec is clear and complete. No critical gaps.
+- `NEEDS REVISION` — Critical or important gaps found. Address the recommendations above before planning.
 ```

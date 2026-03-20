@@ -15,6 +15,13 @@ This skill is relevant when:
 - Validating feature scope and product value
 - Identifying missing user flows and edge cases
 
+## Output File
+
+Always write the review to a markdown file alongside the spec:
+- Path: `<spec-directory>/clarification-review.md`
+- Every gap, question, and missing scenario must include a **Recommendation** — a concrete suggestion for what to add or change in the spec to resolve it.
+- End the file with a **Verdict**: `APPROVED` (no critical gaps) or `NEEDS REVISION` (critical/important gaps found).
+
 ## Scope Boundary
 
 **IN SCOPE — Product questions:**
@@ -79,3 +86,6 @@ When reviewing specifications, verify:
 - [ ] Missing user flows identified
 - [ ] Edge cases documented from the user's perspective
 - [ ] Acceptance criteria are testable and user-observable
+- [ ] Every gap has a concrete Recommendation
+- [ ] Review file written to `<spec-directory>/clarification-review.md`
+- [ ] Verdict included at end of review file

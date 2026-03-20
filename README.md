@@ -30,15 +30,17 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill serves double duty:
 |-------|-------------|
 | `a11y_check` | WCAG accessibility compliance |
 | `analyze` | Pre-implementation spec/plan/task consistency check |
-| `clarify` | Refine requirements and acceptance criteria |
+| `autopilot` | Autonomous pipeline — specify → clarify → plan → implement → QA, no manual gates, skips completed stages |
+| `clarify` | Review spec for product clarity, completeness, and edge cases; writes a review file with recommendations per gap |
 | `code_review` | Security and quality analysis of new code |
 | `commit` | Staging and conventional commits |
 | `constitute` | Define tech stack and architecture constraints |
 | `deploy` | Test, build, and deploy the application |
 | `document` | README updates, JSDoc/TSDoc, inline documentation |
 | `domain_model` | DDD domain modeling with bounded contexts |
-| `feature` | Full SDLC orchestration with approval gates |
+| `feature` | Full SDLC orchestration with manual approval gates |
 | `fix` | Root cause analysis and surgical bug fixes |
+| `full_auto` | Fully autonomous pipeline from raw idea to working code |
 | `implement` | TDD-first code generation |
 | `janitor` | Code cleanup and maintenance |
 | `optimize` | Performance analysis and improvement |
@@ -77,11 +79,13 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill serves double duty:
 - **Step 10**: `/deploy` - Production toggle & deployment (`deploy.md`)
 - **Step 11**: `/retro` - Loop feedback to improve instructions (`retro.md`)
 
-> **Tip:** Run `/feature` to orchestrate the entire SDLC with approval gates at each stage.
+> **Tip:** Run `/feature` to orchestrate the entire SDLC with approval gates, `/autopilot` to run the full pipeline with no gates (skipping completed stages), or `/full_auto` to go from a raw idea to working code in one shot.
 
 ## 🕵️ Special Agents
 
-- **The Orchestrator**: `/feature` - Full SDLC cycle with approval gates (`feature.md`)
+- **The Orchestrator**: `/feature` - Full SDLC cycle with manual approval gates (`feature.md`)
+- **The Autopilot**: `/autopilot` - Full pipeline, no gates, skips already-completed stages (`autopilot.md`)
+- **The Full Auto**: `/full_auto` - Fully autonomous from raw idea to working code (`full_auto.md`)
 - **The Validator**: `/analyze` - Pre-implementation consistency check (`analyze.md`)
 - **The Devil's Advocate**: `/review_constitution` - Challenge & stress-test constraints (`review_constitution.md`)
 - **The Skeptic**: `/skeptical_review` - Critical architectural reviews (`skeptical_review.md`)
