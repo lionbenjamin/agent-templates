@@ -57,6 +57,7 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill serves double duty:
 | `tasks` | Break down plans into actionable tasks |
 | `tech_review` | Technical architecture review |
 | `ux_redesign` | User experience redesign |
+| `wireframe` | Markdown wireframes with UX descriptions from specs (Notion/Linear-inspired) |
 
 ## 🏗️ Project Setup
 
@@ -96,6 +97,7 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill serves double duty:
 - **The A11y Agent**: `/a11y_check` - Accessibility compliance (`a11y_check.md`)
 - **The Principal Designer**: `/ux_redesign` - User experience design (`ux_redesign.md`)
 - **The Design Auditor**: `/design_audit` - Comprehensive UX design audit (`design_audit.md`)
+- **The Wireframer**: `/wireframe` - Markdown wireframes with UX descriptions (`wireframe.md`)
 - **The Bug Hunter**: `/fix` - Surgical bug fixing (`fix.md`)
 - **The Release Gate**: `/release_gate` - Release readiness validation (`release_gate.md`)
 - **Technical Review**: `/tech_review` - Technical architecture review (`tech_review.md`)
