@@ -1,6 +1,6 @@
 # Agent Templates
 
-A comprehensive collection of AI agent templates designed for software development workflows. These templates can be installed into Antigravity, Cursor, and Claude Code to provide specialized AI assistants for various development tasks.
+A comprehensive collection of AI agent templates designed for software development workflows. These templates can be installed into Antigravity, Cursor, Claude Code, and Codex to provide specialized AI assistants for various development tasks.
 
 ## 🚀 Quick Start
 
@@ -9,7 +9,7 @@ A comprehensive collection of AI agent templates designed for software developme
 git clone https://github.com/lionbenjamin/agent-templates.git
 cd agent-templates
 
-# Install workflows for Antigravity, Cursor, and Claude Code
+# Install workflows for Antigravity, Cursor, Claude Code, and Codex
 ./install-workflows.sh
 ```
 
@@ -18,13 +18,16 @@ This will copy all agent templates to:
 - `~/.gemini/antigravity/skills/` (for Antigravity skills)
 - `~/.cursor/commands/` (for Cursor)
 - `~/.claude/commands/` (for Claude Code slash commands)
+- `~/.claude/skills/` (for Claude Code skills)
+- `~/.codex/skills/` (for Codex skills)
 
 ## 🛠️ Skills
 
-Skills live in `skills/<skill-name>/SKILL.md`. Each skill serves double duty:
+Skills live in `skills/<skill-name>/SKILL.md`. Each skill can be used by multiple coding agents:
 
 - **Antigravity**: Auto-discovered and applied when relevant during coding sessions
 - **Claude Code**: Installed as `/command` slash commands via `~/.claude/commands/`
+- **Codex**: Installed into `~/.codex/skills/` and activated by name during Codex sessions
 
 | Skill | Description |
 |-------|-------------|
@@ -109,7 +112,7 @@ Each workflow exists in two formats:
 | Directory | Format | Used By |
 |-----------|--------|---------|
 | `agents/*.md` | Full agent templates with persona, prerequisites, and process | Antigravity workflows, Cursor commands |
-| `skills/*/SKILL.md` | Claude Code skill format with frontmatter and activation triggers | Claude Code slash commands |
+| `skills/*/SKILL.md` | Skill format with frontmatter and activation triggers | Antigravity skills, Claude Code skills/commands, Codex skills |
 
 ### Agent Template Structure
 
