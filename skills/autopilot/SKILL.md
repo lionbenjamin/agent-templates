@@ -1,6 +1,6 @@
 ---
 name: autopilot
-description: Autonomous pipeline — specify, clarify, plan, review, tasks, implement, code review, QA. No manual gates. Skips stages already completed.
+description: Autonomous pipeline — specify, clarify, plan, review, tasks, implement, code review, security review, QA. No manual gates. Skips stages already completed.
 ---
 
 # Autopilot Skill
@@ -54,7 +54,8 @@ This skill is relevant when:
 8. `/implement` — execute the plan
 9. 🧹 **Clear context** — code is on disk, use `git diff` to bootstrap
 10. `/code_review` — review the code → fix all issues → re-review until PASS
-11. `/quality` — comprehensive QA → fix all issues → re-run until PASS
+11. `/security_agent` — full ASVS 5.0 security verification (L2, all 17 chapters) → fix Critical/High findings → re-review until PASS *(skip if security report with PASS verdict exists and no implementation happened this session)*
+12. `/quality` — comprehensive QA → fix all issues → re-run until PASS
 
 ## Quick Checks
 
@@ -68,6 +69,7 @@ When running autopilot, verify:
 - [ ] Tasks cover every item in the plan
 - [ ] Implementation follows the plan strictly
 - [ ] Code review critical/important issues are all resolved
+- [ ] Security review Critical/High findings are all resolved (ASVS PASS verdict)
 - [ ] QA blocker/critical/major issues are all resolved
 - [ ] No review loop exceeded its max iterations
 - [ ] Final summary includes spec, plan, tasks paths and all created/modified files

@@ -33,7 +33,7 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill can be used by multipl
 |-------|-------------|
 | `a11y_check` | WCAG accessibility compliance |
 | `analyze` | Pre-implementation spec/plan/task consistency check |
-| `autopilot` | Autonomous pipeline — specify → clarify → plan → implement → QA, no manual gates, skips completed stages |
+| `autopilot` | Autonomous pipeline — specify → clarify → plan → implement → code review → security review → QA, no manual gates, skips completed stages |
 | `clarify` | Review spec for product clarity, completeness, and edge cases; writes a review file with recommendations per gap |
 | `code_review` | Security and quality analysis of new code |
 | `commit` | Staging and conventional commits |
@@ -54,7 +54,7 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill can be used by multipl
 | `review_constitution` | Challenge and stress-test constraints |
 | `review_domain` | Architectural review of domain model |
 | `review_plan` | Principal Engineer plan review |
-| `security_agent` | Security-focused code analysis (OWASP Top 10) |
+| `security_agent` | Full ASVS 5.0 security verification (L2, all 17 chapters) |
 | `skeptical_review` | Critical architectural review |
 | `specify` | Draft comprehensive product specifications |
 | `tasks` | Break down plans into actionable tasks |
@@ -93,7 +93,7 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill can be used by multipl
 - **The Validator**: `/analyze` - Pre-implementation consistency check (`analyze.md`)
 - **The Devil's Advocate**: `/review_constitution` - Challenge & stress-test constraints (`review_constitution.md`)
 - **The Skeptic**: `/skeptical_review` - Critical architectural reviews (`skeptical_review.md`)
-- **The Security Agent**: `/security_agent` - Security-focused code analysis (`security_agent.md`)
+- **The Security Agent**: `/security_agent` - Full ASVS 5.0 security verification, L2, all 17 chapters (`security_agent.md`)
 - **The Janitor**: `/janitor` - Code cleanup and maintenance (`janitor.md`)
 - **The Doc Agent**: `/document` - Documentation synchronization (`document.md`)
 - **The Speed Demon**: `/optimize` - Performance optimization (`optimize.md`)
