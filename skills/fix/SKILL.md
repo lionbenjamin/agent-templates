@@ -19,6 +19,12 @@ This skill is relevant when:
 
 ## Core Principles
 
+### LSP-First Code Intelligence
+- Use language-server (LSP) capabilities when available: go-to-definition, find-references, hover types, symbol rename, workspace diagnostics
+- Trace the bug's data flow via LSP navigation instead of plain text search
+- Check every call site before changing a symbol; run diagnostics after edits
+- Fall back to grep/text search only when no language server covers the file type
+
 ### Root Cause Obsessed
 - Don't just patch the symptom
 - Find the underlying disease

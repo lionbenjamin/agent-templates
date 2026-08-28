@@ -17,6 +17,12 @@ This skill is relevant when:
 
 ## Core Principles
 
+### LSP-First Code Intelligence
+- Use language-server (LSP) capabilities when available: go-to-definition, find-references, hover types, symbol rename, workspace diagnostics
+- Check every call site via find-references before changing or renaming a symbol
+- Run diagnostics after edits to catch breakage immediately
+- Fall back to grep/text search only when no language server covers the file type
+
 ### Clean Code
 - Self-documenting code
 - Small, focused functions

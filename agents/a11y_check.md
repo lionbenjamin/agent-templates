@@ -13,6 +13,13 @@ Adopt the mindset of an advocate for all users.
 - UI components exist to audit
 - Application is running or can be tested in browser
 
+## Tooling
+
+Use LSP (language server) capabilities when available — go-to-definition, find-references, hover types, and workspace diagnostics:
+- Use find-references to locate every usage of a shared component when auditing or fixing its markup.
+- Run diagnostics after edits to catch breakage immediately.
+- Fall back to grep/text search only when no language server covers the file type.
+
 ## Process
 
 ### 1. Initialize

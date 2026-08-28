@@ -21,6 +21,13 @@ Adopt the mindset of a Principal Software Engineer performing a critical code re
 - An implementation plan should exist in the brain artifacts directory
 - The implementation should be complete (all tasks marked as done)
 
+## Tooling
+
+Use LSP (language server) capabilities when available — go-to-definition, find-references, hover types, and workspace diagnostics:
+- Trace data flow and verify every call site via find-references instead of plain text search.
+- Treat existing compiler/LSP diagnostics as a validation signal.
+- Fall back to grep/text search only when no language server covers the file type.
+
 ## Process
 
 1. **Locate the Implementation Plan**

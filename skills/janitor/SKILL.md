@@ -19,6 +19,12 @@ This skill is relevant when:
 
 ## Core Principles
 
+### LSP-First Code Intelligence
+- Use language-server (LSP) capabilities when available: go-to-definition, find-references, hover types, symbol rename, workspace diagnostics
+- Verify a symbol is truly unused via find-references before deleting — never by text search alone
+- Prefer LSP rename over text replacement; run diagnostics after edits
+- Fall back to grep/text search only when no language server covers the file type
+
 ### Joy Check
 - "Does this code spark joy (utility)?"
 - Remove what's not being used

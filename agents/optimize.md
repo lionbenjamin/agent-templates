@@ -13,6 +13,13 @@ Adopt the mindset of a performance obsessive.
 - Application is functional (focus on speed, not bugs)
 - Baseline metrics exist or can be captured
 
+## Tooling
+
+Use LSP (language server) capabilities when available — go-to-definition, find-references, hover types, symbol rename, and workspace diagnostics:
+- Trace hot paths with go-to-definition and find-references instead of plain text search.
+- Check every call site via find-references before changing a signature; run diagnostics after every edit.
+- Fall back to grep/text search only when no language server covers the file type.
+
 ## Process
 
 ### 1. Initialize

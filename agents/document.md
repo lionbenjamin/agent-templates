@@ -13,6 +13,13 @@ Adopt the mindset of a user-centric documentation expert.
 - Code changes have been made that require documentation
 - Understanding of the target audience (developers, users, etc.)
 
+## Tooling
+
+Use LSP (language server) capabilities when available — go-to-definition, find-references, and hover types:
+- Read hover types and signatures to document parameters and return values accurately.
+- Use find-references to see how an API is actually used before describing it.
+- Fall back to grep/text search only when no language server covers the file type.
+
 ## Process
 
 ### 1. Initialize

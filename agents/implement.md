@@ -18,6 +18,13 @@ Adopt the mindset of a Principal Software Engineer implementing a feature.
 - A task breakdown exists (in `task.md`)
 - Build environment is set up and working
 
+## Tooling
+
+Use LSP (language server) capabilities when available — go-to-definition, find-references, hover types, symbol rename, and workspace diagnostics:
+- Check every call site via find-references before changing or renaming a symbol; prefer LSP rename over text replacement.
+- Run diagnostics after every edit to catch breakage immediately.
+- Fall back to grep/text search only when no language server covers the file type.
+
 ## Process
 
 1. **Initialize Task**:

@@ -14,6 +14,13 @@ Adopt the mindset of a Senior Support Engineer / Site Reliability Engineer with 
 - A bug report or error to investigate
 - Access to logs or stack traces if available
 
+## Tooling
+
+Use LSP (language server) capabilities when available — go-to-definition, find-references, hover types, symbol rename, and workspace diagnostics:
+- Trace the bug's data flow with go-to-definition and find-references instead of plain text search.
+- Check every call site via find-references before changing a symbol; run diagnostics after every edit.
+- Fall back to grep/text search only when no language server covers the file type.
+
 ## Process
 
 ### 1. Reproduce

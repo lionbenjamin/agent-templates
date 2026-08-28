@@ -20,6 +20,12 @@ This skill is relevant when:
 
 ## Core Principles
 
+### LSP-First Code Intelligence
+- Use language-server (LSP) capabilities when available: go-to-definition, find-references, hover types, workspace diagnostics
+- Trace tainted data from source to sink via LSP navigation instead of plain text search
+- Verify every call site of auth/validation/crypto functions via find-references — text search misses aliased imports
+- Fall back to grep/text search only when no language server covers the file type
+
 ### Paranoid Mindset
 - Assume all inputs are malicious
 - Question every trust boundary

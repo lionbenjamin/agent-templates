@@ -19,6 +19,12 @@ This skill is relevant when:
 
 ## Core Principles
 
+### LSP-First Code Intelligence
+- Use language-server (LSP) capabilities when available: go-to-definition, find-references, hover types
+- Read hover types and signatures to document parameters and return values accurately
+- Use find-references to see how an API is actually used before describing it
+- Fall back to grep/text search only when no language server covers the file type
+
 ### Clarity
 - Explain *why*, not just *what*
 - Write for the target audience

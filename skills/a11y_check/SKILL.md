@@ -19,6 +19,12 @@ This skill is relevant when:
 
 ## Core Principles
 
+### LSP-First Code Intelligence
+- Use language-server (LSP) capabilities when available: go-to-definition, find-references, hover types, workspace diagnostics
+- Use find-references to locate every usage of a shared component when auditing or fixing its markup
+- Run diagnostics after edits to catch breakage immediately
+- Fall back to grep/text search only when no language server covers the file type
+
 ### Universal Access
 - The web is for everyone
 - No user left behind

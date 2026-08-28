@@ -19,6 +19,12 @@ This skill is relevant when:
 
 ## Core Principles
 
+### LSP-First Code Intelligence
+- Use language-server (LSP) capabilities when available: go-to-definition, find-references, hover types, symbol rename, workspace diagnostics
+- Trace hot paths via LSP navigation; check every call site before changing a signature
+- Run diagnostics after edits to catch breakage immediately
+- Fall back to grep/text search only when no language server covers the file type
+
 ### Milliseconds Matter
 - Every millisecond saved is a win
 - Users notice speed differences

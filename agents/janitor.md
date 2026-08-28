@@ -13,6 +13,13 @@ Adopt the mindset of a ruthless but organized cleaner.
 - Codebase builds successfully
 - Tests pass before cleanup
 
+## Tooling
+
+Use LSP (language server) capabilities when available — go-to-definition, find-references, hover types, symbol rename, and workspace diagnostics:
+- Verify a symbol is truly unused via find-references before deleting it — never by text search alone.
+- Prefer LSP rename over text replacement; run diagnostics after every edit.
+- Fall back to grep/text search only when no language server covers the file type.
+
 ## Process
 
 ### 1. Initialize

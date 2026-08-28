@@ -17,6 +17,12 @@ This skill is relevant when:
 
 ## Core Principles
 
+### LSP-First Code Intelligence
+- Use language-server (LSP) capabilities when available: go-to-definition, find-references, hover types, workspace diagnostics
+- Trace data flow and verify every call site via find-references instead of plain text search
+- Treat existing compiler/LSP diagnostics as a validation signal
+- Fall back to grep/text search only when no language server covers the file type
+
 ### Focus on the Macros
 - Architecture matters more than style
 - Security, performance, maintainability first
