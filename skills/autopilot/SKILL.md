@@ -1,11 +1,11 @@
 ---
 name: autopilot
-description: Autonomous pipeline — specify, clarify, plan, review, tasks, implement, code review, security review, QA. No manual gates. Skips stages already completed.
+description: Autonomous pipeline — specify, clarify, plan, review, tasks, implement, code review, security review, QA. Every stage runs in its own sub-agent. No manual gates. Skips stages already completed.
 ---
 
 # Autopilot Skill
 
-Run the full idea-to-implementation pipeline autonomously, skipping stages already completed, and self-correcting at each review stage.
+Run the full idea-to-implementation pipeline autonomously, skipping stages already completed, and self-correcting at each review stage. Every stage is delegated to its own sub-agent; the orchestrator routes file paths, findings, and verdicts.
 
 ## When to Activate
 
@@ -20,6 +20,14 @@ This skill is relevant when:
 ### Zero Manual Gates
 - Run the entire pipeline without pausing for user approval.
 - Only escalate to the user for critical issues that cannot be autonomously resolved (ambiguous requirements, business decisions, or review loops that hit the max iteration limit).
+
+### Sub-Agent Delegation
+- Every stage — and every review/fix iteration — runs in its own fresh sub-agent (Task/Agent tool).
+- Sub-agent prompts are self-contained: feature description, artifact file paths, and the command to run. Sub-agents share no context.
+- Sub-agents return artifact paths, verdict tokens, and findings — never whole files. The orchestrator keeps only paths, verdicts, and open findings.
+- Decisions (skip detection, answering clarification questions, loop control, escalation) stay with the orchestrator.
+- Sub-agents that touch or validate code (implement, code review, security review, QA, fix iterations) are instructed to use LSP capabilities (go-to-definition, find-references, rename, diagnostics) when available, falling back to text search otherwise.
+- Fresh sub-agent contexts replace the old context-clear checkpoints. If no sub-agent mechanism exists, run stages inline in the same order.
 
 ### Smart Skip
 - Check what's already been done before starting each stage.
@@ -44,23 +52,24 @@ This skill is relevant when:
 
 ## Pipeline
 
+Each numbered stage runs in a dedicated sub-agent; review→fix loops spawn a fresh sub-agent per iteration.
+
 1. `/specify` — draft the product specification *(skip if spec file exists)*
-2. `/clarify` — review spec for completeness, self-answer questions, fix gaps *(skip if clarification already recorded in spec)*
-3. 🧹 **Clear context** — spec is on disk
-4. `/planning` — draft the implementation plan *(skip if plan file exists)*
-5. `/review_plan` — critique the plan → fix all issues → re-review until APPROVED *(skip if plan already has APPROVED verdict)*
-6. 🧹 **Clear context** — plan is on disk, re-read it to bootstrap
-7. `/tasks` — break down into actionable tasks *(skip if tasks file exists)*
-8. `/implement` — execute the plan
-9. 🧹 **Clear context** — code is on disk, use `git diff` to bootstrap
-10. `/code_review` — review the code → fix all issues → re-review until PASS
-11. `/security_agent` — full ASVS 5.0 security verification (L2, all 17 chapters) → fix Critical/High findings → re-review until PASS *(skip if security report with PASS verdict exists and no implementation happened this session)*
-12. `/quality` — comprehensive QA → fix all issues → re-run until PASS
+2. `/clarify` — review spec for completeness → orchestrator self-answers questions → fix sub-agent applies decisions → re-review until clean *(skip if clarification already recorded in spec)*
+3. `/planning` — draft the implementation plan *(skip if plan file exists)*
+4. `/review_plan` — critique the plan → fix sub-agent → re-review until APPROVED *(skip if plan already has APPROVED verdict)*
+5. `/tasks` — break down into actionable tasks *(skip if tasks file exists)*
+6. `/implement` — execute the plan
+7. `/code_review` — review the code → fix sub-agent → re-review until PASS
+8. `/security_agent` — full ASVS 5.0 security verification (L2, all 17 chapters) → fix Critical/High findings → re-review until PASS *(skip if security report with PASS verdict exists and no implementation happened this session)*
+9. `/quality` — comprehensive QA → fix sub-agent → re-run until PASS
 
 ## Quick Checks
 
 When running autopilot, verify:
 - [ ] Feature idea or description exists before starting
+- [ ] Every stage ran in its own sub-agent (or inline fallback was noted)
+- [ ] Sub-agent prompts were self-contained (feature description + artifact paths + command)
 - [ ] Skipped stages are announced with clear reason
 - [ ] Spec addresses the user's core need and all key user flows
 - [ ] Clarification questions are self-answered using judgment (not escalated unless truly ambiguous)
