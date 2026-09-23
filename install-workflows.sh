@@ -37,7 +37,13 @@ GEMINI_SKILLS_DIR="$HOME/.gemini/antigravity/skills"
 CURSOR_DIR="$HOME/.cursor/commands"
 CLAUDE_COMMANDS_DIR="$HOME/.claude/commands"
 CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
-CODEX_SKILLS_DIR="$HOME/.codex/skills"
+# Codex discovers user skills from the shared agents directory.
+CODEX_SKILLS_DIR="$HOME/.agents/skills"
+# opencode's global config dirs. opencode auto-loads skills from the shared
+# ~/.agents/skills and ~/.claude/skills dirs above, so only agents and
+# commands need their own home.
+OPENCODE_AGENTS_DIR="$HOME/.config/opencode/agents"
+OPENCODE_COMMANDS_DIR="$HOME/.config/opencode/commands"
 
 # Check if agents directory exists
 if [ ! -d "$AGENTS_DIR" ]; then
@@ -113,6 +119,8 @@ mkdir -p "$CURSOR_DIR"
 mkdir -p "$CLAUDE_COMMANDS_DIR"
 mkdir -p "$CLAUDE_SKILLS_DIR"
 mkdir -p "$CODEX_SKILLS_DIR"
+mkdir -p "$OPENCODE_AGENTS_DIR"
+mkdir -p "$OPENCODE_COMMANDS_DIR"
 
 # Copy workflow files to both destinations
 echo "Copying workflow files..."
@@ -128,9 +136,16 @@ for file in "$AGENTS_DIR"/*.md; do
             safe_copy "$file" "$CLAUDE_COMMANDS_DIR/planning.md"
             echo "  $filename (-> planning.md for Claude Code)"
         else
-            safe_copy "$file" "$CLAUDE_COMMANDS_DIR/$filename"
+        safe_copy "$file" "$CLAUDE_COMMANDS_DIR/$filename"
         fi
-        echo "  $filename"
+
+        # opencode agents. plan -> planning to avoid the built-in /plan.
+        if [ "$filename" = "plan.md" ]; then
+            safe_copy "$file" "$OPENCODE_AGENTS_DIR/planning.md"
+        else
+            safe_copy "$file" "$OPENCODE_AGENTS_DIR/$filename"
+        fi
+        echo "   $filename"
     fi
 done
 
@@ -148,8 +163,10 @@ if [ -d "$SKILLS_DIR" ]; then
             safe_copy_dir "$skill_dir" "$CODEX_SKILLS_DIR/$skill_name"
             if [ -f "$skill_dir/SKILL.md" ]; then
                 safe_copy "$skill_dir/SKILL.md" "$CLAUDE_COMMANDS_DIR/$skill_name.md"
+                 # opencode slash commands from SKILL.md (name is valid frontmatter)
+                safe_copy "$skill_dir/SKILL.md" "$OPENCODE_COMMANDS_DIR/$skill_name.md"
             fi
-            echo "  $skill_name"
+            echo "   $skill_name"
         fi
     done
 fi

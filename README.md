@@ -1,6 +1,6 @@
 # Agent Templates
 
-A comprehensive collection of AI agent templates designed for software development workflows. These templates can be installed into Antigravity, Cursor, Claude Code, and Codex to provide specialized AI assistants for various development tasks.
+A comprehensive collection of AI agent templates designed for software development workflows. These templates can be installed into Antigravity, Cursor, Claude Code, Codex, and OpenCode to provide specialized AI assistants for various development tasks.
 
 ## 🚀 Quick Start
 
@@ -19,7 +19,11 @@ This will copy all agent templates to:
 - `~/.cursor/commands/` (for Cursor)
 - `~/.claude/commands/` (for Claude Code slash commands)
 - `~/.claude/skills/` (for Claude Code skills)
-- `~/.codex/skills/` (for Codex skills)
+- `~/.agents/skills/` (for Codex skills)
+- `~/.config/opencode/agents/` (for OpenCode agents)
+- `~/.config/opencode/commands/` (for OpenCode slash commands)
+
+> **OpenCode note:** OpenCode auto-discovers skills from the shared `~/.agents/skills/` and `~/.claude/skills/` directories above, so skills work without extra steps. `plan.md` is renamed `planning.md` for OpenCode to avoid its built-in `/plan` command/agent.
 
 ## 🛠️ Skills
 
@@ -27,7 +31,8 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill can be used by multipl
 
 - **Antigravity**: Auto-discovered and applied when relevant during coding sessions
 - **Claude Code**: Installed as `/command` slash commands via `~/.claude/commands/`
-- **Codex**: Installed into `~/.codex/skills/` and activated by name during Codex sessions
+- **Codex**: Installed into `~/.agents/skills/` and activated by name during Codex sessions
+- **OpenCode**: Auto-discovered from the shared `~/.agents/skills/` / `~/.claude/skills/` dirs; agents and commands also installed to `~/.config/opencode/agents/` and `~/.config/opencode/commands/`
 
 | Skill | Description |
 |-------|-------------|
