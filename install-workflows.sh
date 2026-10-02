@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Script to install workflow files and skills to Gemini, Cursor, Claude Code, and Codex directories
+# Script to install workflow files and skills to Gemini, Cursor, Claude Code, Codex and OpenCode
+# directories, plus OpenSpec schemas to the OpenSpec user schema directory
 
 set -e
 
@@ -44,6 +45,10 @@ CODEX_SKILLS_DIR="$HOME/.agents/skills"
 # commands need their own home.
 OPENCODE_AGENTS_DIR="$HOME/.config/opencode/agents"
 OPENCODE_COMMANDS_DIR="$HOME/.config/opencode/commands"
+# OpenSpec resolves user-level schemas from ${XDG_DATA_HOME:-~/.local/share}/openspec/schemas,
+# so every project can use them without a per-project copy.
+OPENSPEC_SCHEMAS_SRC="$SCRIPT_DIR/openspec-schemas"
+OPENSPEC_SCHEMAS_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/openspec/schemas"
 
 # Check if agents directory exists
 if [ ! -d "$AGENTS_DIR" ]; then
@@ -167,6 +172,20 @@ if [ -d "$SKILLS_DIR" ]; then
                 safe_copy "$skill_dir/SKILL.md" "$OPENCODE_COMMANDS_DIR/$skill_name.md"
             fi
             echo "   $skill_name"
+        fi
+    done
+fi
+
+# Copy OpenSpec schemas (used by the openspec_autopilot skill)
+if [ -d "$OPENSPEC_SCHEMAS_SRC" ]; then
+    echo ""
+    echo "Copying OpenSpec schemas..."
+
+    for schema_dir in "$OPENSPEC_SCHEMAS_SRC"/*/; do
+        if [ -f "$schema_dir/schema.yaml" ]; then
+            schema_name=$(basename "$schema_dir")
+            safe_copy_dir "$schema_dir" "$OPENSPEC_SCHEMAS_DIR/$schema_name"
+            echo "   $schema_name"
         fi
     done
 fi
