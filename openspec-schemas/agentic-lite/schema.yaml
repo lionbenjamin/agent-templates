@@ -1,0 +1,199 @@
+name: agentic-lite
+version: 1
+description: >-
+  Agentic SDLC for explicit briefs (bugfix with repro, named removal, config change,
+  refactor) - brief → specs (or skip_specs) → design → plan-review → tasks. No product
+  spec, no clarification; the plan review absorbs open questions.
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: Brief - the explicit request, its evidence and its boundaries
+    template: proposal.md
+    instruction: |
+      Write a short brief for an explicit change. This schema is for work whose
+      "what" is already decided: a bugfix with a repro, a named removal, a
+      config change, a refactor. If the request needs product discovery (user
+      stories, UX, open scope), stop and recommend the `agentic-sdlc` schema.
+
+      Keep it under one page. Two headings are fixed because `openspec
+      validate` parses them:
+      - `## Why` - the problem and the evidence (repro steps, error, ticket,
+        the user's words). 50-1000 characters.
+      - `## What Changes` - bullet list of the concrete changes. Mark
+        incompatible or removed behaviour with **BREAKING**.
+
+      Then decide whether observable behaviour changes:
+      - Yes (a bugfix that changes what users see, a removed feature): note the
+        affected behaviour under Behaviour Change; the specs step writes deltas.
+      - No (pure refactor, tooling, docs, internal config): write "None" under
+        Behaviour Change AND add `skip_specs: true` to this change's
+        `.openspec.yaml`. The specs step is then skipped automatically.
+
+      Never write a spec backwards from an existing plan. If a plan already
+      exists, link it under References - the design step builds on it.
+    requires: []
+
+  - id: specs
+    generates: "specs/**/*.md"
+    description: Delta specs for the behaviour this change alters
+    template: spec.md
+    instruction: |
+      Write delta specs only for the behaviour listed under the brief's
+      Behaviour Change. A bugfix usually means one MODIFIED requirement or one
+      added scenario that pins the fixed behaviour.
+
+      1. Run `openspec list --specs` and `openspec show "<spec-id>" --type spec`
+         to find the capability that owns the behaviour. Reuse its exact path.
+         Only introduce a new capability if none owns it (kebab-case, named for
+         the behaviour, not the work).
+      2. Write `specs/<capability-path>/spec.md` with delta headers:
+         `## ADDED Requirements`, `## MODIFIED Requirements` (copy the ENTIRE
+         existing block, header text unchanged, then edit),
+         `## REMOVED Requirements` (with **Reason** and **Migration**),
+         `## RENAMED Requirements` (FROM:/TO:). New capabilities only start with
+         `## Purpose` (50+ characters).
+      3. Format: `### Requirement:` with SHALL/MUST, 500 characters max; every
+         requirement has at least one `#### Scenario:` (exactly four hashes)
+         with **WHEN** / **THEN** bullets. Observable behaviour only.
+
+      If the brief says Behaviour Change: None, `.openspec.yaml` must contain
+      `skip_specs: true` and no spec files may exist - fix the metadata instead
+      of writing an empty delta.
+    requires:
+      - proposal
+
+  - id: design
+    generates: design.md
+    description: Technical implementation plan - TDD strategy, proposed changes, impact, verification
+    template: design.md
+    instruction: |
+      This is the `/plan` stage for an explicit brief. If the `plan` or
+      `planning` skill is available, follow it. If the brief links an existing
+      plan, build on it rather than starting over.
+
+      Explore the codebase first (LSP go-to-definition / find-references when
+      available, text search otherwise): the code to change, every consumer of
+      anything removed or renamed, and the existing tests.
+
+      Constitution: read `technical_constitution.md` and `RULES.md` at the
+      project root if they exist (the config context may name another path).
+      Every decision must comply. Fill the Constitution Compliance section
+      with the constraints this design touches and how it meets each. A
+      deliberate deviation is allowed only with a stated reason, listed in
+      Constitution Compliance AND under User Review Required.
+
+      Follow the template's sections; drop sections that do not apply (e.g.
+      Accessibility Strategy for backend work) by writing "N/A". Rules:
+      - For a bugfix, the first test in the TDD Strategy reproduces the bug.
+      - For a removal, list every consumer found and how each is handled.
+      - Security Surface: answer yes/no for each surface - it decides whether
+        the security review runs.
+      - Map every requirement and scenario in specs/ (if any) to a test case.
+      - Proposed Changes: test files first, then implementation, tagged
+        [NEW] / [MODIFY] / [DELETE], ordered by dependency.
+      - Product-level questions the brief leaves open go under User Review
+        Required - the plan review adjudicates them.
+    requires:
+      - specs
+
+  - id: plan-review
+    generates: plan-review.md
+    description: Adversarial plan review - written only once the verdict is APPROVED
+    template: plan-review.md
+    instruction: |
+      This is the `/review_plan` stage: a skeptical Principal Engineer review of
+      design.md against the brief and specs/. If the `review_plan` skill is
+      available, follow it. Never skip this stage.
+
+      THIS FILE IS A GATE. Write plan-review.md ONLY when the verdict is
+      APPROVED. Each round that finds issues is written to
+      `reviews/plan-review-round-<n>.md` (verdict NEEDS REVISION).
+
+      Review completeness (every brief item and spec scenario covered by a test
+      and a change), correctness, blast radius (dangling references after
+      removals, all consumers handled), security (and whether Security Surface
+      is answered truthfully), performance, reuse and whether the verification
+      would really prove the fix.
+
+      Constitution: if `technical_constitution.md` / `RULES.md` exist, check
+      every decision against them. An unflagged violation is Critical. A
+      deviation listed under User Review Required with a reason is not a
+      violation, but judge whether the reason holds.
+
+      Adjudicate User Review Required: decide each item you can from the brief
+      and the codebase, and record the decision. Items only the user can decide
+      go under Product Gaps - stop and report them.
+
+      Fix loop (max 3 rounds): write the round file, apply every Critical and
+      Important fix to design.md (note each in Revision Notes), re-review.
+
+      Record the Tasks Recommendation: "transcribe" if Proposed Changes touches
+      fewer than ~15 files and is already ordered per file.
+    requires:
+      - design
+
+  - id: tasks
+    generates: tasks.md
+    description: Implementation checklist tracked by apply
+    template: tasks.md
+    instruction: |
+      Break the approved design.md into tracked tasks. If plan-review.md says
+      "transcribe" (the usual case here), convert Proposed Changes into
+      checkboxes 1:1 in the same order - do not re-plan - then add the fixed
+      closing groups below.
+
+      Format: `## <n>. <Group>` headings; every tracked task is
+      `- [ ] <n>.<m> <description>` and states how to verify it; tests before
+      the code they cover; each group lands its own tests.
+
+      Close with the two fixed groups from the template, numbered after the
+      implementation groups: `Gates` (one task: run the full gate set and
+      record it in reviews/gates.md) and `Verification`. Copy the
+      Verification tasks verbatim with the change id filled in - `openspec
+      archive` refuses while any of them is unticked, so they are the review
+      gate and must never be dropped or merged into other tasks. For the
+      security task, read design.md's Security Surface: any "yes" → keep the
+      security review task; all "no" → use the waiver wording from the
+      template comment instead. Remove all template comments.
+
+      End with the untracked `## Workflow follow-up` section from the template.
+    requires:
+      - plan-review
+
+apply:
+  requires: [tasks]
+  tracks: tasks.md
+  instruction: |
+    This is the `/implement` stage. Follow design.md strictly. Work through
+    tasks.md in order and tick each box as soon as it is verified.
+
+    - TDD: write the failing test first (for a bugfix: the repro), see it
+      fail, then implement.
+    - Use LSP capabilities (go-to-definition, find-references, rename,
+      diagnostics) when available; fall back to text search otherwise.
+    - Read `technical_constitution.md` and `RULES.md` (project root) if they
+      exist before coding. If following design.md would violate them, stop and
+      report the conflict instead of choosing either side yourself.
+    - Never edit proposal.md, specs/ or the review artifacts. If the design
+      cannot work, stop and report the conflict.
+    - The Gates task runs the full gate set (typecheck, lint, full test
+      suite, build) once and writes verbatim output tails to reviews/gates.md.
+
+    Verification group (the last tracked group):
+    - Run each review in a FRESH sub-agent when your tool supports one (Task /
+      Agent tool or equivalent) - the reviewer must not be the context that
+      wrote the code. Give it the change id, the change folder, the command
+      and the report path; it returns the verdict and findings. Without
+      sub-agents, review inline and note "inline review" in the report.
+    - Loop: on NEEDS WORK / NOT PASS, fix every Critical and Important finding
+      (in a fresh fix sub-agent if available), then run a fresh review. Max 3
+      rounds; after that stop and report, leaving the box unticked.
+    - Tick a verification box only when its report ends in a passing verdict.
+      Never tick a box to get past archive.
+    - Reviews check the claims in reviews/gates.md against the diff instead of
+      re-running the full suite. If a fix changed code, re-run the gate set and
+      append the new tails to reviews/gates.md before ticking the next box.
+    - Security: if the security task is a waiver but the diff touches API
+      routes, auth/session, security rules, spend/billing, untrusted-input
+      parsing or adds a dependency, run the security review instead and
+      rewrite that task accordingly.

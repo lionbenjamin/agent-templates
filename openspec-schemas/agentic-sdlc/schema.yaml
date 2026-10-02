@@ -1,0 +1,334 @@
+name: agentic-sdlc
+version: 1
+description: >-
+  Agentic SDLC - proposal (product spec) → clarification → specs → design (TDD plan)
+  → plan-review → tasks. Review artifacts exist only once their review is APPROVED,
+  so the dependency graph doubles as the review gate.
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: Product specification - what to build and why, technology-agnostic
+    template: proposal.md
+    instruction: |
+      Write the product specification for this change. This is the `/specify`
+      stage: define WHAT to build and WHY, never HOW. If the `specify` skill is
+      available, follow it; this instruction and the template are the contract.
+
+      Persona: Product Lead. Focus on user value, explicit scope, user-centric
+      stories and observable outcomes.
+
+      Follow the template's sections in order. Two headings are fixed because
+      `openspec validate` parses them:
+      - `## Why` - the problem statement: the pain point or gap, and why now.
+        50-1000 characters.
+      - `## What Changes` - what users will be able to do after this change, as
+        a bullet list. Mark behaviour that is removed or changed incompatibly
+        with **BREAKING**.
+
+      Acceptance criteria must be specific, testable and user-observable - each
+      one becomes a requirement or scenario in the specs step. Edge cases must
+      cover empty, error, loading and boundary states from the user's view.
+
+      Do NOT include technical detail: no API endpoints, data models, schemas,
+      architecture, libraries, file names or affected-code lists. Do NOT name
+      OpenSpec capabilities - mapping onto living specs happens in the specs
+      step. Technical impact belongs in design.md.
+
+      If the change has no user-observable behaviour change at all (pure
+      refactor, tooling, docs), this schema is the wrong fit - use
+      `agentic-lite` instead.
+
+      IMPORT MODE - when the request points to an existing product spec file
+      (e.g. `docs/<version>/specs/<slug>-spec.md` written by `/specify`),
+      transcribe it instead of writing from scratch. Faithful, not a rewrite:
+      keep the author's wording, drop nothing, add nothing beyond the mapping.
+      - Summary, Goals, User Stories, Acceptance Criteria (all subsections),
+        Edge Cases, Out of Scope, Success Metrics → same section, verbatim.
+      - Problem Statement → `## Why`. Over 1000 characters: put a faithful
+        condensed version in Why and move the full text to the end of Summary.
+      - `## What Changes` → the only section you write: derive it from the
+        User Stories and Functional criteria as "Users can ..." bullets.
+      - Any other section → keep it under its own heading, after Success
+        Metrics.
+      - Technical detail in the source stays in (faithful import); the
+        clarification step will flag it.
+      Directly under the title, add a provenance block:
+        > Imported from `<source path>` on <YYYY-MM-DD>.
+        > Prior clarification review: `<path>` (verdict: <verdict>)
+        > Existing plan: `<path>`
+      Include the review line only if `clarification-review.md` next to the
+      source names this spec in its `_Spec file:_` line. Include the plan line
+      only if a matching plan exists (e.g. `docs/<version>/plans/<slug>-plan.md`).
+      Never edit or move the source file.
+    requires: []
+
+  - id: clarification
+    generates: clarification.md
+    description: Product clarity review - written only once the review verdict is APPROVED
+    template: clarification.md
+    instruction: |
+      This is the `/clarify` stage: a product-only review of proposal.md, run
+      right after it is written and before any spec is derived from it. If the
+      `clarify` skill is available, follow it.
+
+      THIS FILE IS A GATE. specs cannot start until clarification.md exists,
+      so write clarification.md ONLY when the verdict is APPROVED. Each review
+      round that finds gaps is written to `reviews/clarification-round-<n>.md`
+      instead (same template, verdict NEEDS REVISION).
+
+      Persona: Principal Product Manager. Ask "would a product manager care?" -
+      if not, do not raise it. Out of scope: APIs, data models, architecture,
+      libraries, performance implementation, existing code or tech debt.
+
+      Check:
+      - Ambiguity: vague terms ("fast", "easy", "good UX") without a measure.
+      - Missing states: empty, error, loading, success - what the user sees.
+      - Missing flows and happy-path bias.
+      - Scope: is it a realistic MVP; what could be cut without losing value.
+      - Testability: every acceptance criterion and edge case is specific
+        enough to become a WHEN/THEN scenario without guessing.
+      - Consistency: user stories, acceptance criteria, edge cases and out of
+        scope do not contradict each other.
+
+      Every finding gets a concrete **Recommendation** (the text to add or
+      change, and in which file).
+
+      Imported proposals: if proposal.md's provenance block names a prior
+      clarification review, read it first. Do not re-raise questions it
+      already settled unless proposal.md now contradicts the decision; carry
+      its decisions into the Decision Log. Also flag any technical detail the
+      import carried over (APIs, data models, architecture): the fix moves it
+      verbatim out of proposal.md into `reviews/technical-notes.md`, where the
+      design step picks it up.
+
+      Fix loop (max 2 rounds):
+      1. Write the round file with findings.
+      2. Recommendations that only add precision (missing states, vague
+         criteria, missing edge cases): apply them to proposal.md.
+      3. Findings that need a product decision (conflicting goals, scope cuts,
+         business rules): list them as Open Questions with your recommended
+         answer and STOP. The user decides - or, if an orchestrating agent
+         dispatched you, it decides and re-dispatches.
+      4. Re-review. When nothing Critical or Important remains, write
+         clarification.md with verdict APPROVED and the Decision Log - every
+         decision taken across all rounds and where it landed.
+    requires:
+      - proposal
+
+  - id: specs
+    generates: "specs/**/*.md"
+    description: Delta specs - the proposal's acceptance criteria as requirements and scenarios, filed under capabilities
+    template: spec.md
+    instruction: |
+      Translate the approved proposal's acceptance criteria and edge cases into
+      delta specs against the project's living specs. You own the capability
+      mapping the proposal deliberately left out. clarification.md is approved,
+      so its Decision Log is binding - read it alongside proposal.md.
+
+      1. Map capabilities. Run `openspec list --specs`, then
+         `openspec show "<spec-id>" --type spec --json --no-scenarios` for any
+         that look related, and read relevant ones in full with
+         `openspec show "<spec-id>" --type spec`. Decide which existing
+         capabilities change (reuse their exact path) and which new ones are
+         introduced. Name new capabilities for a durable area of behaviour
+         (`password-reset`), never for this change's work (`add-reset-endpoint`).
+         Use kebab-case path segments and follow the existing layout.
+      2. Write one file per capability at `specs/<capability-path>/spec.md`.
+      3. Translate. Every functional, UI/UX and performance acceptance
+         criterion that users can observe becomes a `### Requirement:` or a
+         `#### Scenario:` under one. Every edge case becomes a scenario. Do not
+         invent behaviour the proposal does not state. If a criterion is still
+         too vague to write as a scenario, do not guess: stop and report it as
+         a product question (the answer goes into proposal.md and the
+         Decision Log in clarification.md, then you continue).
+      4. Self-check coverage. Write `reviews/spec-coverage.md`: a table mapping
+         every acceptance criterion and edge case in proposal.md to its
+         capability, requirement and scenario. No row may stay empty; every
+         scenario must appear in at least one row. The plan review checks it.
+
+      Delta format (## headers):
+      - `## ADDED Requirements` - new behaviour.
+      - `## MODIFIED Requirements` - copy the ENTIRE existing requirement block
+        (header through all scenarios) from the living spec and edit it. Header
+        text must match exactly. Partial blocks lose detail at archive time.
+      - `## REMOVED Requirements` - include **Reason** and **Migration**.
+      - `## RENAMED Requirements` - FROM:/TO: format.
+      - New capabilities only: start the file with `## Purpose` (one or two
+        sentences, 50+ characters). Never add Purpose to an existing capability.
+
+      Format rules (`openspec validate --strict` enforces them):
+      - `### Requirement: <name>` then a description using SHALL or MUST.
+      - Every requirement has at least one `#### Scenario: <name>` - exactly
+        four hashes - with **WHEN** / **THEN** bullets.
+      - Requirement descriptions stay at or under 500 characters: one behaviour
+        per requirement, examples and edge cases go into scenarios.
+      - Observable behaviour only: inputs, outputs, errors, user-facing states,
+        external constraints. No class names, libraries or execution steps.
+
+      There must be at least one spec file unless the change's `.openspec.yaml`
+      sets `skip_specs: true`.
+    requires:
+      - clarification
+
+  - id: design
+    generates: design.md
+    description: Technical implementation plan - TDD strategy, proposed changes, impact, verification
+    template: design.md
+    instruction: |
+      This is the `/plan` stage: HOW to build what proposal.md and specs/
+      define. If the `plan` or `planning` skill is available, follow it.
+
+      Persona: Principal Architect - correctness first, simple but not simpler
+      than necessary, consistent with existing patterns.
+
+      If proposal.md's provenance block names an existing plan, build on it:
+      carry over its decisions and file list, restructure it into this
+      template, and fill the gaps (requirement → test map, Security Surface).
+      Do not discard its choices without a stated reason in Decisions. If
+      `reviews/technical-notes.md` exists (technical detail clarification moved
+      out of an imported proposal), treat it as input in the same way.
+
+      Constitution: read `technical_constitution.md` and `RULES.md` at the
+      project root if they exist (the config context may name another path).
+      Every decision must comply. Fill the Constitution Compliance section
+      with the constraints this design touches and how it meets each. A
+      deliberate deviation is allowed only with a stated reason, listed in
+      Constitution Compliance AND under User Review Required.
+
+      Before writing, explore the codebase: integration points, existing
+      components to reuse, test setup, seed/mock data sufficiency, design
+      tokens for UI work, and region/quota limits for third-party APIs. Use LSP
+      (go-to-definition, find-references) when available, text search otherwise.
+
+      Follow the template's sections in order. Rules:
+      - Reference proposal.md and specs/ instead of restating them.
+      - Impact lists affected code, APIs, dependencies and systems - this
+        section moved here from the proposal on purpose.
+      - Security Surface: state yes/no for each listed surface. The orchestrator
+        uses it to decide whether the security review runs.
+      - TDD Strategy comes BEFORE Proposed Changes. Map every requirement and
+        scenario in specs/ to at least one named test case (input → expected).
+        State test commands and the expected test count change.
+      - Proposed Changes lists test files first, then implementation files,
+        each tagged [NEW] / [MODIFY] / [DELETE] with a one-line change summary,
+        ordered by dependency.
+      - Open Questions are only for unknowns that would not change specs,
+        approach or task breakdown. Anything else: resolve it now or ask.
+    requires:
+      - specs
+
+  - id: plan-review
+    generates: plan-review.md
+    description: Adversarial plan review - written only once the verdict is APPROVED
+    template: plan-review.md
+    instruction: |
+      This is the `/review_plan` stage: a skeptical Principal Engineer review of
+      design.md against proposal.md and specs/. If the `review_plan` skill is
+      available, follow it. This stage is never skipped.
+
+      THIS FILE IS A GATE. tasks.md cannot start until plan-review.md exists, so
+      write plan-review.md ONLY when the verdict is APPROVED. Each round that
+      finds issues is written to `reviews/plan-review-round-<n>.md` instead
+      (same template, verdict NEEDS REVISION).
+
+      Review:
+      - Completeness, end to end: every acceptance criterion and edge case in
+        proposal.md maps to a scenario in specs/ (check reviews/spec-coverage.md
+        against both files - do not trust it blindly), and every requirement
+        and scenario maps to a test in the TDD Strategy and to a change in
+        Proposed Changes. A criterion with no scenario is a Product Gap.
+      - Correctness: data model changes are valid, relations and constraints
+        hold, migrations are backward compatible, rollback exists.
+      - Security: injection points, authorisation on every path, secrets,
+        input validation. Check that Security Surface is answered truthfully.
+      - Performance: N+1 queries, unindexed lookups, bundle weight.
+      - Reuse: nothing rewritten that already exists; existing patterns followed.
+      - Constitution: if `technical_constitution.md` / `RULES.md` exist, check
+        every decision against them. An unflagged violation is Critical. A
+        deviation listed under User Review Required with a reason is not a
+        violation, but judge whether the reason holds.
+      - Verification: the plan's checks would actually prove correctness - no
+        vacuous tests.
+      - Scope: nothing beyond proposal.md; nothing in proposal.md missing.
+
+      Fix loop (max 3 rounds): write the round file, then apply every Critical
+      and Important fix to design.md (note each change in its Revision Notes),
+      then re-review. If a finding exposes a product gap, do not patch it in
+      the design - report it so proposal.md and specs/ are fixed first.
+
+      Also record the Tasks Recommendation: if Proposed Changes touches fewer
+      than ~15 files and is already ordered per file, mark tasks as
+      "transcribe" - the tasks step converts it 1:1 without re-planning.
+    requires:
+      - design
+
+  - id: tasks
+    generates: tasks.md
+    description: Implementation checklist tracked by apply
+    template: tasks.md
+    instruction: |
+      Break the approved design.md into tracked tasks. If plan-review.md says
+      "transcribe", convert Proposed Changes into checkboxes 1:1 in the same
+      order - do not re-plan - then add the fixed closing groups below.
+
+      Format (apply parses it):
+      - Group under `## <n>. <Group name>` headings, ordered by dependency.
+      - Every tracked task is `- [ ] <n>.<m> <description>`. Only `[x]` counts
+        as done; lines without a checkbox are not tracked.
+      - Each task states how to verify it (test, command, observable result).
+      - TDD: within each group, the test task comes before the code it covers.
+      - Each group lands its own tests and docs - never a trailing "write tests"
+        group.
+
+      Close with the two fixed groups from the template, numbered after the
+      implementation groups: `Gates` (one task: run the full gate set and
+      record it in reviews/gates.md) and `Verification`. Copy the
+      Verification tasks verbatim with the change id filled in - `openspec
+      archive` refuses while any of them is unticked, so they are the review
+      gate and must never be dropped or merged into other tasks. For the
+      security task, read design.md's Security Surface: any "yes" → keep the
+      security review task; all "no" → use the waiver wording from the
+      template comment instead. Remove all template comments.
+
+      End with the untracked `## Workflow follow-up` section from the template.
+    requires:
+      - plan-review
+
+apply:
+  requires: [tasks]
+  tracks: tasks.md
+  instruction: |
+    This is the `/implement` stage. Follow design.md strictly; specs/ define
+    done. Work through tasks.md in order and tick each box as soon as it is
+    verified.
+
+    - TDD: write the failing test first, see it fail, then implement.
+    - Use LSP capabilities (go-to-definition, find-references, rename,
+      diagnostics) when available; fall back to text search otherwise.
+    - Read `technical_constitution.md` and `RULES.md` (project root) if they
+      exist before coding. If following design.md would violate them, stop and
+      report the conflict instead of choosing either side yourself.
+    - Never edit proposal.md, specs/ or the review artifacts. If they are wrong
+      or the design cannot work, stop and report the conflict instead of
+      improvising.
+    - The Gates task runs the full gate set (typecheck, lint, full test
+      suite, build) once and writes verbatim output tails to reviews/gates.md.
+
+    Verification group (the last tracked group):
+    - Run each review in a FRESH sub-agent when your tool supports one (Task /
+      Agent tool or equivalent) - the reviewer must not be the context that
+      wrote the code. Give it the change id, the change folder, the command
+      and the report path; it returns the verdict and findings. Without
+      sub-agents, review inline and note "inline review" in the report.
+    - Loop: on NEEDS WORK / NOT PASS, fix every Critical and Important finding
+      (in a fresh fix sub-agent if available), then run a fresh review. Max 3
+      rounds; after that stop and report, leaving the box unticked.
+    - Tick a verification box only when its report ends in a passing verdict.
+      Never tick a box to get past archive.
+    - Reviews check the claims in reviews/gates.md against the diff instead of
+      re-running the full suite. If a fix changed code, re-run the gate set and
+      append the new tails to reviews/gates.md before ticking the next box.
+    - Security: if the security task is a waiver but the diff touches API
+      routes, auth/session, security rules, spend/billing, untrusted-input
+      parsing or adds a dependency, run the security review instead and
+      rewrite that task accordingly.

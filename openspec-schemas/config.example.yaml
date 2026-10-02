@@ -1,0 +1,38 @@
+# Example openspec/config.yaml for projects using the agentic schemas.
+# Copy to <project>/openspec/config.yaml and replace the context with your own.
+
+# Default schema for `openspec new change`. Override per change with
+# `--schema agentic-lite` for explicit briefs (bugfix, removal, refactor).
+schema: agentic-sdlc
+
+# Sent with every artifact's instructions and with apply. Keep it short: the
+# full constitution stays in technical_constitution.md (written by /constitute),
+# which the design, plan-review and apply steps read directly. Repeat only the
+# top non-negotiables here as a constant reminder.
+context: |
+  Constitution: technical_constitution.md and RULES.md (project root) are binding.
+  Tech stack: <!-- e.g. Next.js 15, TypeScript strict, Firestore, Vitest, Playwright -->
+  Architecture: <!-- e.g. server actions only, no client-side Firestore writes -->
+  Testing: <!-- e.g. TDD; unit tests next to source; e2e for every user flow -->
+  Gate set: <!-- e.g. pnpm typecheck && pnpm lint && pnpm test && pnpm build -->
+  Server surface: <!-- e.g. src/app/api/, src/lib/auth/, firestore.rules, src/lib/billing/ -->
+
+# Per-artifact rules. Only shown for the matching artifact ID.
+rules:
+  proposal:
+    - Success metrics must be measurable with data we already collect
+  design:
+    - Every new API route validates input with a schema at the boundary
+  tasks:
+    - Each task names the exact test file it adds or changes
+
+operations:
+  apply:
+    guidance:
+      - Run focused tests while iterating; run the full gate set once at the end
+  archive:
+    guidance:
+      # The review gate itself is the Verification group in tasks.md: archive
+      # will not proceed while any task is unticked.
+      - Never pass --yes to archive past unticked Verification tasks; report them instead.
+      - Archive only after the change is merged.
