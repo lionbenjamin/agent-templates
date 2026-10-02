@@ -13,6 +13,8 @@ cd agent-templates
 ./install-workflows.sh
 ```
 
+To update after pulling new changes, run `./install-workflows.sh --force`. Without it, files you already installed are skipped because they differ from the new versions. `--force` also overwrites any local edits to installed copies, so preview first with `./install-workflows.sh --dry-run --force`.
+
 This will copy all agent templates to:
 - `~/.gemini/antigravity/global_workflows/` (for Antigravity workflows)
 - `~/.gemini/antigravity/skills/` (for Antigravity skills)
@@ -22,6 +24,7 @@ This will copy all agent templates to:
 - `~/.agents/skills/` (for Codex skills)
 - `~/.config/opencode/agents/` (for OpenCode agents)
 - `~/.config/opencode/commands/` (for OpenCode slash commands)
+- `~/.local/share/openspec/schemas/` (OpenSpec schemas, or `$XDG_DATA_HOME/openspec/schemas/`)
 
 > **OpenCode note:** OpenCode auto-discovers skills from the shared `~/.agents/skills/` and `~/.claude/skills/` directories above, so skills work without extra steps. `plan.md` is renamed `planning.md` for OpenCode to avoid its built-in `/plan` command/agent.
 
@@ -51,6 +54,7 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill can be used by multipl
 | `full_auto` | Fully autonomous pipeline from raw idea to working code |
 | `implement` | TDD-first code generation |
 | `janitor` | Code cleanup and maintenance |
+| `openspec_autopilot` | Autopilot on OpenSpec — drives the `agentic-sdlc` / `agentic-lite` schemas, skips what `openspec status` reports done |
 | `optimize` | Performance analysis and improvement |
 | `plan` | Technical implementation planning |
 | `quality` | Correctness verification and audit |
@@ -94,6 +98,7 @@ Skills live in `skills/<skill-name>/SKILL.md`. Each skill can be used by multipl
 
 - **The Orchestrator**: `/feature` - Full SDLC cycle with manual approval gates (`feature.md`)
 - **The Autopilot**: `/autopilot` - Full pipeline, no gates, skips already-completed stages (`autopilot.md`)
+- **The OpenSpec Autopilot**: `/openspec_autopilot` - Autopilot pipeline on OpenSpec changes (`openspec_autopilot.md`)
 - **The Full Auto**: `/full_auto` - Fully autonomous from raw idea to working code (`full_auto.md`)
 - **The Validator**: `/analyze` - Pre-implementation consistency check (`analyze.md`)
 - **The Devil's Advocate**: `/review_constitution` - Challenge & stress-test constraints (`review_constitution.md`)
@@ -118,6 +123,7 @@ Each workflow exists in two formats:
 |-----------|--------|---------|
 | `agents/*.md` | Full agent templates with persona, prerequisites, and process | Antigravity workflows, Cursor commands |
 | `skills/*/SKILL.md` | Skill format with frontmatter and activation triggers | Antigravity skills, Claude Code skills/commands, Codex skills |
+| `openspec-schemas/*/` | OpenSpec schemas (`schema.yaml` + `templates/`) and `config.example.yaml` | OpenSpec CLI, `/openspec_autopilot` |
 
 ### Agent Template Structure
 
@@ -156,6 +162,99 @@ When using `/tasks`, you can mark tasks for parallel execution:
 - `[P]` — Can run in parallel with other `[P]` tasks
 - `[B]` — Blocking; dependencies must complete first
 
+## 📐 OpenSpec Integration
+
+For projects that use [OpenSpec](https://github.com/Fission-AI/OpenSpec), `openspec-schemas/` contains two custom schemas that run this repo's SDLC inside an OpenSpec change (`openspec/changes/<id>/`). The installer copies them to OpenSpec's user schema directory, so every project can use them.
+
+| Schema | For | Artifacts |
+|--------|-----|-----------|
+| `agentic-sdlc` | Product work: new user-facing behaviour, open scope, UX | proposal → clarification → specs → design → plan-review → tasks |
+| `agentic-lite` | Explicit briefs: bugfix with repro, named removal, config change, refactor | proposal (brief) → specs or `skip_specs` → design → plan-review → tasks |
+
+How the stages map:
+
+| This repo | OpenSpec artifact | Notes |
+|-----------|-------------------|-------|
+| `/specify` | `proposal.md` | The full product spec, technology-agnostic. Uses `## Why` / `## What Changes` headings because `openspec validate` requires them |
+| `/clarify` | `clarification.md` | Product review of the proposal alone, right after it is written. **Written only when APPROVED**; failed rounds go to `reviews/` |
+| — | `specs/<capability>/spec.md` | Written from the approved proposal: maps the change onto the living specs and turns acceptance criteria and edge cases into requirements and scenarios; writes a criterion → scenario table to `reviews/spec-coverage.md` that the plan review checks |
+| `/plan` | `design.md` | TDD plan; also carries Impact and a Security Surface checklist |
+| `/review_plan` | `plan-review.md` | **Written only when APPROVED**; never skipped |
+| `/tasks` | `tasks.md` | Transcribed 1:1 from the design for small changes; always ends with fixed **Gates** and **Verification** groups |
+| `/implement` | apply | Implementation tasks, then the Gates task records the gate run in `reviews/gates.md` |
+| `/code_review`, `/security_agent`, `/quality` | Verification tasks → `reviews/*.md` | Run during apply in fresh sub-agents (`/quality` together with `/opsx:verify`); security becomes a waiver task when the design's Security Surface is all "no". Ticked only on PASS |
+| `/constitute` | `technical_constitution.md` / `RULES.md`, read by design, plan-review, apply and code review | Design records compliance and flagged deviations; plan review treats unflagged violations as Critical. `config.yaml` `context` repeats the top non-negotiables (see `openspec-schemas/config.example.yaml`) |
+
+Two gates are enforced by OpenSpec itself:
+
+- **Before code:** OpenSpec treats an artifact as done once its file exists, so writing review artifacts only on APPROVED turns the dependency graph into the review gate: specs cannot start before clarification passes, and `tasks` cannot start before the plan review passes.
+- **Before archive:** code review, security review, QA and `openspec validate --strict` are tracked tasks, and `openspec archive` will not proceed while any task is unticked.
+
+### Setup
+
+```bash
+npm i -g @fission-ai/openspec        # OpenSpec CLI
+./install-workflows.sh               # installs /openspec_autopilot and both schemas
+
+# once per project
+openspec init --tools claude         # creates openspec/ and the /opsx:* commands
+openspec config profile              # "Delivery and workflows" - see the table below, then:
+openspec update                      # regenerates the /opsx:* commands in this project
+```
+
+In `openspec config profile`, keep delivery mode **Both (skills + commands)** and select these workflows:
+
+| Workflow | Select | Why |
+|----------|--------|-----|
+| Propose change | ✅ | Creates a change and writes all planning artifacts in one go (uses the default schema from `config.yaml`) |
+| Explore ideas | ✅ | Think through options before creating a change |
+| New change | ✅ | Chat version of `openspec new change`; creating changes in the terminal with `--schema`, or via autopilot, does the same |
+| **Continue change** | ✅ | `/opsx:continue`: the step-by-step route, one artifact per call |
+| Apply tasks | ✅ | `/opsx:apply`: implementation, gates and the Verification tasks |
+| Update change | ✅ | Revise artifacts of an in-flight change |
+| **Fast-forward** | ✅ | `/opsx:ff`: all remaining planning artifacts at once; still stops at the review gates for decisions |
+| Sync specs | ✅ | Merges delta specs into `openspec/specs/` without archiving. Don't use it before merge; archive does the same at the right time |
+| Archive change | ✅ | `/opsx:archive` after merge |
+| Bulk archive | — | Archives several changes at once; not needed |
+| **Verify change** | ✅ | `/opsx:verify`: used by the QA task in the Verification group |
+| Onboard | — | Guided OpenSpec tutorial; not part of the flow |
+
+The defaults leave the three in bold off. The profile is global, but `openspec update` has to be run in each project to generate the new commands there.
+
+Then copy `openspec-schemas/config.example.yaml` to `openspec/config.yaml`. `openspec init` sets `schema: spec-driven` (OpenSpec's built-in schema, with no clarification, plan review or Verification tasks), so either set `schema: agentic-sdlc` there or pass `--schema` on every change. `openspec status --change <id>` shows which schema a change uses.
+
+### Step by step
+
+```bash
+openspec new change add-password-reset --schema agentic-sdlc
+```
+
+```
+/opsx:continue add-password-reset    # proposal.md      - your /specify content
+/opsx:continue add-password-reset    # clarification    - product review of the proposal; asks you on product decisions
+/opsx:continue add-password-reset    # specs            - from the approved proposal, + reviews/spec-coverage.md
+/opsx:continue add-password-reset    # design           - TDD plan, Security Surface, constitution compliance
+/opsx:continue add-password-reset    # plan-review
+/opsx:continue add-password-reset    # tasks            - ends with the Gates and Verification groups
+/opsx:apply add-password-reset       # code, gates, then code review / security / QA / validate as tasks
+```
+
+`/opsx:ff <id>` runs all planning steps in one go. After merge: `/opsx:archive <id>` (or `openspec archive <id>`), which merges the delta specs into `openspec/specs/` and moves the change, `reviews/` included, to `openspec/changes/archive/`.
+
+### Autopilot
+
+```
+/openspec_autopilot Users can reset their password via an emailed link   # new change; picks the schema
+/openspec_autopilot add-password-reset                                    # resume from wherever the change is
+/openspec_autopilot docs/v0.3/specs/password-reset-spec.md                # import an existing /specify spec
+```
+
+Every stage and every review round runs in its own sub-agent; it stops only for product decisions or reviews that keep failing, and never archives. You can mix both routes: write and clarify the proposal yourself, then hand the change id to autopilot.
+
+**Importing** transcribes the spec into `proposal.md` (only `## What Changes` is written fresh) and continues with clarification. A prior `clarification-review.md` for that spec is reused, and a matching `docs/*/plans/<slug>-plan.md` is built on by the design step. Step by step: `/opsx:continue <id>` with "import docs/v0.3/specs/password-reset-spec.md".
+
+Tested against OpenSpec 1.14.
+
 ## 🧠 Memory System
 
 Agents persist context across sessions using these files:
@@ -179,10 +278,21 @@ Agents like `/plan` and `/implement` reference these files to ensure consistency
 
 ### Modifying Existing Workflows
 
-Edit the files in `agents/` and/or `skills/`, then reinstall:
+Edit the files in `agents/` and/or `skills/`, then reinstall with `--force`. The installer skips any file that differs from its installed copy, to protect local edits, so a plain run never updates something already installed:
 
 ```bash
-./install-workflows.sh
+./install-workflows.sh --dry-run --force   # preview: lists [overwrite] for every installed file that would change
+./install-workflows.sh --force             # overwrite installed copies with the repo versions
+```
+
+### Modifying the OpenSpec Schemas
+
+Edit `openspec-schemas/<schema>/schema.yaml` (artifact instructions and order) or its `templates/`. `spec.md`, `design.md`, `plan-review.md` and `tasks.md` exist in both schemas and must stay identical. Each schema folder has to be self-contained, so they can't be shared. Reinstall, then validate the installed copies:
+
+```bash
+./install-workflows.sh --force          # without --force, files that differ from the installed copy are skipped
+openspec schema validate agentic-sdlc   # run inside any OpenSpec project
+openspec schema validate agentic-lite
 ```
 
 ## 🎯 Best Practices
